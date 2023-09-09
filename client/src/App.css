@@ -1,11 +1,100 @@
-
-
-
-/* Add for button */ 
+/* Add for button */
 .top-right-button {
- height: 50px;
- width: 100px;
+    height: 50px;
+    width: 100px;
 }
 
 
-/* */ 
+/* */
+
+/* ExpenseCard.css */
+
+.parent-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* You can adjust the height as needed for your parent container */
+  }
+
+.expense-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    margin: 16px;
+    /* max-width: 300px; */
+    transition: transform 0.2s;
+    width: 70%;
+}
+
+.expense-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.expense-card h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.expense-card p {
+    margin: 8px 0;
+    color: #777;
+}
+
+.expense-card p:first-child {
+    font-weight: bold;
+    color: #222;
+}
+
+.expense-card .purpose {
+    font-style: italic;
+}
+
+.expense-card .amount {
+    font-size: 24px;
+    color: #ff5733;
+    /* Customize the color to your preference */
+}
+
+
+.expense-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.expense-buttons {
+    display: flex;
+}
+
+.edit-button,
+.delete-button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.edit-button:hover,
+.delete-button:hover {
+    background-color: #555;
+}
+
+.expense-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically center the content */
+  }
+  
+  .expense-date,
+  .expense-amount,
+  .expense-description,
+  .expense-category {
+    flex: 1;
+  }

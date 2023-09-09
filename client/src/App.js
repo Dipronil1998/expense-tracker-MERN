@@ -60,44 +60,31 @@ function App() {
             Primary
           </Button>
         </div>
-
-        <div style={tableStyle}>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-                <th>Username</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                <td>@fat</td>
-              </tr>
-            </tbody>
-          </Table>
-        </div>
       </Container>
+
+      <div className="parent-container">
+        <div className="expense-card">
+          <div className="expense-header">
+            <h3>title</h3>
+            <div className="expense-buttons">
+              <button className="edit-button">Edit</button>
+              <button className="delete-button">Delete</button>
+            </div>
+          </div>
+          <p className="expense-details">
+            <span className="expense-date">Date: 10/03/2021</span>
+            <span className="expense-amount">Amount: $100</span>
+          </p>
+          <p className="expense-details">
+          <span className="expense-description">Purpose: Lunch</span>
+            <span className="expense-category">Category: Food</span>
+          </p>
+          
+        </div>
+      </div>
+
+
+
 
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
