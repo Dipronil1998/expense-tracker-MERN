@@ -1,0 +1,71 @@
+{
+	"info": {
+		"_postman_id": "9a98003d-0e3c-4aeb-8a38-3d7942c9a857",
+		"name": "Expenses-tracker-MERN",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12457882"
+	},
+	"item": [
+		{
+			"name": "add expenses",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"luncu\",\r\n    \"date\": \"2023-07-12\",\r\n    \"amount\": 30.50,\r\n    \"category\": \"Self\",\r\n    \"paymentMethod\": \"Cash\",\r\n    \"paymentBank\": \"ICICI\",\r\n    \"description\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3001/api/v1/expenses",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"v1",
+						"expenses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all expenses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3001/api/v1/expenses",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"v1",
+						"expenses"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "2023-09-11",
+							"disabled": true
+						},
+						{
+							"key": "to",
+							"value": "2023-09-12",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
