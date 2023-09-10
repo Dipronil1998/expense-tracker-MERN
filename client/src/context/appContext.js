@@ -8,6 +8,8 @@ import {
 } from './Action'
 
 const initialState = {
+    isEditing: false,
+    expensesData: [],
     validCategories: ["Stock", "Mutual fund", "Self", "Other"],
     validPaymentMethod: ["Cash", "Online"],
     validPaymentBank: ["SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"],
@@ -17,26 +19,48 @@ const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
     const [state, dispatch] = useReducer(Reducer, initialState);
+    const baseUrl = "http://localhost:3001/api/v1"
 
     const handelChange = ({ name, value }) => {
         dispatch({
-          type: HANDLE_CHANGE,
-          payload: {
-            name, value
-          }
+            type: HANDLE_CHANGE,
+            payload: {
+                name, value
+            }
         });
-      }
+    }
+
+    const getAllExpenses = async () => {
+        dispatch({ type: GET_EXPENSES_BEGIN });
+        try {
+            const url = `${baseUrl}/expenses`
+            const expensesResponse = await axios.get(url);
+            dispatch({
+                type: GET_EXPENSES_SUCCESS,
+                payload: {
+                    expensesData: expensesResponse.data.response,
+                },
+            });
+        } catch (error) {
+
+        }
+    }
+
+    useEffect(() => {
+        getAllExpenses()
+    }, [])
 
     return (
         <AppContext.Provider
-          value={{
-            ...state,
-            handelChange
-          }}
+            value={{
+                ...state,
+                handelChange,
+                getAllExpenses
+            }}
         >
-          {children}
+            {children}
         </AppContext.Provider>
-      )
+    )
 
 }
 

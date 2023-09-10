@@ -11,6 +11,12 @@ const Reducer = (state, action) => {
             [action.payload.name]: action.payload.value
         };
     }
+    if (action.type === GET_EXPENSES_SUCCESS) {
+        return {
+          ...state,
+          expensesData: action.payload.expensesData,
+        };
+      }
 }
 
 export default Reducer;

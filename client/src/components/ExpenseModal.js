@@ -5,7 +5,9 @@ import { useAppContext } from '../context/appContext';
 
 
 const ExpenseModal = ({ show, handleClose }) => {
-  const { validCategories,
+  const { 
+    isEditing,
+    validCategories,
     validPaymentMethod,
     validPaymentBank,
     handelChange
@@ -18,7 +20,7 @@ const ExpenseModal = ({ show, handleClose }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Expenses</Modal.Title>
+        <Modal.Title>{isEditing ? 'Edit Expenses' : 'Add Expenses'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>

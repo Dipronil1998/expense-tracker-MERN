@@ -1,53 +1,26 @@
 import React from 'react';
 import Expense from './Expense'; // Import the Expense component
+import { useAppContext } from '../context/appContext';
 
-
-const expensesData = [
-    {
-      "title": "Lunch",
-      "date": "2023-09-10",
-      "amount": 50.00,
-      "category": "Food",
-      "paymentMethod": "UPI",
-      "paymentBank":"SBI",
-      "description": "Lunch with friends",
-    },
-    {
-      "title": "Gasoline",
-      "date": "2023-09-11",
-      "amount": 30.50,
-      "category": "Transportation",
-      "paymentMethod": "Credit Card",
-      "paymentBank":"SBI",
-      "description": "Filling up the car",
-    },
-    {
-      "title": "Movie Tickets",
-      "date": "2023-09-12",
-      "amount": 25.00,
-      "category": "Entertainment",
-      "paymentMethod": "Cash",
-      "paymentBank":"SBI",
-      "description": "Watched a new release",
-    },
-    {
-      "title": "Groceries",
-      "date": "2023-09-13",
-      "amount": 80.00,
-      "category": "Shopping",
-      "paymentMethod": "Debit Card",
-      "paymentBank":"SBI",
-      "description": "Weekly grocery shopping",
-    },
-  ];
+const noDataMessageStyle = {
+  color: '#888',
+  fontSize: '18px',
+  textAlign: 'center',
+  marginTop: '20px',
+};
 
 const ExpenseList = () => {
+  const { expensesData } = useAppContext();
+  
   return (
     <div>
-      {expensesData &&
-        expensesData.map((expenseData, index) => (
+      {expensesData?.length === 0 ? (
+        <p style={noDataMessageStyle}>No data found.</p>
+      ) : (
+        expensesData?.map((expenseData, index) => (
           <Expense key={index} expenseData={expenseData} />
-        ))}
+        ))
+      )}
     </div>
   );
 };

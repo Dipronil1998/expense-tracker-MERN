@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import '../assets/css/Expense.css';
 
 const Expense = ({ expenseData }) => {
@@ -13,8 +14,8 @@ const Expense = ({ expenseData }) => {
           </div>
         </div>
         <p className="expense-details">
-          <span className="expense-date">Date: {expenseData.date}</span>
-          <span className="expense-amount">Amount: ${expenseData.amount}</span>
+          <span className="expense-date">Date: {moment(expenseData.date).format('DD-MM-YYYY')}</span>
+          <span className="expense-amount">Amount: ₹{expenseData.amount}</span>
         </p>
         <p className="expense-details">
           <span className="expense-category">Category: {expenseData.category}</span>
