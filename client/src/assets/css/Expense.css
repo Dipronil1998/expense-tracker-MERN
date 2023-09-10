@@ -86,6 +86,7 @@
   .expense-amount,
   .expense-paymentMethod,
   .expense-description,
+  .expense-paymentBank,
   .expense-category {
     flex: 1;
   }

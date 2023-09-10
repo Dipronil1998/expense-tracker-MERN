@@ -9,6 +9,7 @@ const expensesData = [
       "amount": 50.00,
       "category": "Food",
       "paymentMethod": "UPI",
+      "paymentBank":"SBI",
       "description": "Lunch with friends",
     },
     {
@@ -17,6 +18,7 @@ const expensesData = [
       "amount": 30.50,
       "category": "Transportation",
       "paymentMethod": "Credit Card",
+      "paymentBank":"SBI",
       "description": "Filling up the car",
     },
     {
@@ -25,6 +27,7 @@ const expensesData = [
       "amount": 25.00,
       "category": "Entertainment",
       "paymentMethod": "Cash",
+      "paymentBank":"SBI",
       "description": "Watched a new release",
     },
     {
@@ -33,6 +36,7 @@ const expensesData = [
       "amount": 80.00,
       "category": "Shopping",
       "paymentMethod": "Debit Card",
+      "paymentBank":"SBI",
       "description": "Weekly grocery shopping",
     },
   ];
