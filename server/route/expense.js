@@ -4,10 +4,8 @@ router.use(express.json({}));
 const epensesController=require('../controller/expense');
 
 
-router.post(
-    '/',
-    epensesController.addExpenses
-);
+router.post('/',epensesController.addExpenses);
+router.get('/',epensesController.viewExpenses);
 
 
 module.exports = router;
