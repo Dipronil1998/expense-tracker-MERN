@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import ExpenseModal from './ExpenseModal'; // Import the ExpenseModal component
+import ExpenseModal from './ExpenseModal';
 
 const buttonStyle = {
   justifyContent: 'flex-end',
   alignItems: 'flex-end',
   display: 'flex',
   flexDirection: 'row',
-  marginRight: '5%', // Reduce the margin-right
+  marginRight: '5%', 
 };
 
 const AddExpenseButton = () => {

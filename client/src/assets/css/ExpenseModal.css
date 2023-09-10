@@ -1,0 +1,10 @@
+.buttons-container {
+    display: flex;
+    justify-content: space-between; /* Add space between the buttons */
+    padding: 10px; /* Add padding to all sides of the button container */
+  }
+  
+  .save-button {
+    margin-right: 10px; /* Add margin to the right of the Save button for spacing */
+  }
+  
