@@ -1,8 +1,20 @@
 import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import "../assets/css/ExpenseModal.css"
+import { useAppContext } from '../context/appContext';
+
 
 const ExpenseModal = ({ show, handleClose }) => {
+  const { validCategories,
+    validPaymentMethod,
+    validPaymentBank,
+    handelChange
+  } = useAppContext();
+
+  const handleInput = (e) => {
+    handelChange({ name: e.target.name, value: e.target.value })
+  };
+
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -16,7 +28,7 @@ const ExpenseModal = ({ show, handleClose }) => {
               type="text"
               name="title"
               // value={title}
-              // onChange={handleChange}
+              onChange={handleInput}
               required
             />
           </Form.Group>
@@ -31,8 +43,8 @@ const ExpenseModal = ({ show, handleClose }) => {
                   placeholder="yyyy-MM-dd"
                   pattern="\d{4}-\d{2}-\d{2}"
                   title="Please use the yyyy-MM-dd format"
-                  // value={date}
-                  // onChange={handleChange}
+                // value={date}
+                onChange={handleInput}
                 />
               </Form.Group>
             </div>
@@ -43,14 +55,13 @@ const ExpenseModal = ({ show, handleClose }) => {
                   type="number"
                   name="amount"
                   // value={amount}
-                  // onChange={handleChange}
+                  onChange={handleInput}
                   required
                 />
               </Form.Group>
             </div>
           </div>
 
-          {/* Row 3: Category, Payment Method, and Payment Bank */}
           <div className="row">
             <div className="col">
               <Form.Group controlId="category">
@@ -59,14 +70,17 @@ const ExpenseModal = ({ show, handleClose }) => {
                   as="select"
                   name="category"
                   // value={category}
-                  // onChange={handleChange}
+                  onChange={handleInput}
                   required
                 >
                   <option value="">Select Category</option>
-                  <option value="stock">Stock</option>
-                  <option value="mutual fund">Mutual Fund</option>
-                  <option value="self">Self</option>
-                  <option value="other">Other</option>
+                  {
+                    validCategories && validCategories.map((itemValue, index) => {
+                      return (
+                        <option key={index} value={itemValue}>{itemValue}</option>
+                      )
+                    })
+                  }
                 </Form.Control>
               </Form.Group>
             </div>
@@ -77,12 +91,17 @@ const ExpenseModal = ({ show, handleClose }) => {
                   as="select"
                   name="paymentMethod"
                   // value={paymentMethod}
-                  // onChange={handleChange}
+                  onChange={handleInput}
                   required
                 >
                   <option value="">Select Payment Method</option>
-                  <option value="UPI">UPI</option>
-                  <option value="Credit Card">Credit Card</option>
+                  {
+                    validPaymentMethod && validPaymentMethod.map((itemValue, index) => {
+                      return (
+                        <option key={index} value={itemValue}>{itemValue}</option>
+                      )
+                    })
+                  }
                 </Form.Control>
               </Form.Group>
             </div>
@@ -93,11 +112,16 @@ const ExpenseModal = ({ show, handleClose }) => {
                   as="select"
                   name="paymentBank"
                 // value={paymentBank}
-                // onChange={handleChange}
+                onChange={handleInput}
                 >
                   <option value="">Select Bank</option>
-                  <option value="SBI">SBI</option>
-                  <option value="ICICI">ICICI</option>
+                  {
+                    validPaymentBank && validPaymentBank.map((itemValue, index) => {
+                      return (
+                        <option key={index} value={itemValue}>{itemValue}</option>
+                      )
+                    })
+                  }
                 </Form.Control>
               </Form.Group>
             </div>
@@ -110,7 +134,7 @@ const ExpenseModal = ({ show, handleClose }) => {
               as="textarea"
               name="description"
             // value={description}
-            // onChange={handleChange}
+            onChange={handleInput}
             />
           </Form.Group>
           <div className="buttons-container">
