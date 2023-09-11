@@ -31,7 +31,7 @@ const AppProvider = ({ children }) => {
     }
 
     const getAllExpenses = async () => {
-        dispatch({ type: GET_EXPENSES_BEGIN });
+        // dispatch({ type: GET_EXPENSES_BEGIN });
         try {
             const url = `${baseUrl}/expenses`
             const expensesResponse = await axios.get(url);
