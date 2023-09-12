@@ -25,6 +25,7 @@ const ExpenseModal = ({ show, handleClose }) => {
   } = useAppContext();
 
   const handleInput = (e) => {
+    setErrors((prevErrors) => ({ ...prevErrors, [e.target.name]: '' }));
     setValues({...values, [e.target.name]: e.target.value})
   };
 
@@ -57,7 +58,11 @@ const ExpenseModal = ({ show, handleClose }) => {
   const handleSubmit = (e) =>{
     e.preventDefault();
     if (validateForm()) {
-      console.log("AA", values);
+      if(isEditing){
+        console.log("edit");
+        return
+      }
+      console.log("add", values);
     }
   }
 

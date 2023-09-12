@@ -46,6 +46,10 @@ const AppProvider = ({ children }) => {
         }
     }
 
+    const createExpenses = async () =>{
+
+    }
+
     useEffect(() => {
         getAllExpenses()
     }, [])
@@ -55,7 +59,8 @@ const AppProvider = ({ children }) => {
             value={{
                 ...state,
                 handelChange,
-                getAllExpenses
+                getAllExpenses,
+                createExpenses,
             }}
         >
             {children}
