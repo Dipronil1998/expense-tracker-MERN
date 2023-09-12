@@ -19,6 +19,8 @@ const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
     const [state, dispatch] = useReducer(Reducer, initialState);
+    const [selectedDates, setSelectedDates] = useState([]);
+    const [tempSelectedDates, setTempSelectedDates] = useState([]);
     const baseUrl = "http://localhost:3001/api/v1"
 
     const handelChange = ({ name, value }) => {
@@ -46,7 +48,7 @@ const AppProvider = ({ children }) => {
         }
     }
 
-    const createExpenses = async () =>{
+    const createExpenses = async () => {
 
     }
 
@@ -61,6 +63,10 @@ const AppProvider = ({ children }) => {
                 handelChange,
                 getAllExpenses,
                 createExpenses,
+                selectedDates,
+                setSelectedDates,
+                tempSelectedDates,
+                setTempSelectedDates,
             }}
         >
             {children}

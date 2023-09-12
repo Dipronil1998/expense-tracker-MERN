@@ -38,13 +38,15 @@ const AddExpenseButton = () => {
           <Button variant="danger">Cancel</Button>
         </div>
       </div>
+      <div className="">
+
       <Button
         variant="primary"
-        className="top-right-button"
         onClick={openModal}
-      >
+        >
         Add Expense
       </Button>
+        </div>
 
       {/* Render the ExpenseModal component */}
       <ExpenseModal show={showModal} handleClose={closeModal} />
