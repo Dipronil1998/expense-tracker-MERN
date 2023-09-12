@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const validCategories = ["Stock", "Mutual fund", "Self", "Other"];
 const validPaymentMethod = ["Cash", "Online"];
-const validPaymentBank = ["SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"];
+const validPaymentBank = ["","SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"];
 
 const expensesSchema = new mongoose.Schema({
     title: {

@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import "../assets/css/ExpenseModal.css"
 import { useAppContext } from '../context/appContext';
 
+const initialState = {
+  title: "",
+  date: "",
+  amount: "",
+  category: "",
+  paymentMethod: "",
+  paymentBank: "",
+  description: ""
+}
 
 const ExpenseModal = ({ show, handleClose }) => {
+  const [values, setValues]= useState(initialState)
+  const [errors, setErrors] = useState({});
   const { 
     isEditing,
     validCategories,
@@ -14,8 +25,41 @@ const ExpenseModal = ({ show, handleClose }) => {
   } = useAppContext();
 
   const handleInput = (e) => {
-    handelChange({ name: e.target.name, value: e.target.value })
+    setValues({...values, [e.target.name]: e.target.value})
   };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!values.title) {
+      newErrors.title = 'Title is required.';
+    }
+    if (!values.amount) {
+      newErrors.amount = 'Amount is required.';
+    } else if (isNaN(values.amount) || parseFloat(values.amount) <= 0) {
+      newErrors.amount = 'Amount must be a positive number.';
+    }
+    if (!values.category) {
+      newErrors.category = 'Category is required.';
+    }
+    if (!values.paymentMethod) {
+      newErrors.paymentMethod = 'Payment Method is required.';
+    }
+    if(values.paymentMethod === "Online"){
+      if (!values.paymentBank) {
+        newErrors.paymentBank = 'Payment Bank is required.';
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
+
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    if (validateForm()) {
+      console.log("AA", values);
+    }
+  }
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -33,6 +77,7 @@ const ExpenseModal = ({ show, handleClose }) => {
               onChange={handleInput}
               required
             />
+            <Form.Text className="text-danger">{errors.title}</Form.Text>
           </Form.Group>
 
           <div className="row">
@@ -48,6 +93,7 @@ const ExpenseModal = ({ show, handleClose }) => {
                 // value={date}
                 onChange={handleInput}
                 />
+                <Form.Text className="text-danger">{errors.date}</Form.Text>
               </Form.Group>
             </div>
             <div className="col">
@@ -60,6 +106,7 @@ const ExpenseModal = ({ show, handleClose }) => {
                   onChange={handleInput}
                   required
                 />
+                <Form.Text className="text-danger">{errors.amount}</Form.Text>
               </Form.Group>
             </div>
           </div>
@@ -84,6 +131,7 @@ const ExpenseModal = ({ show, handleClose }) => {
                     })
                   }
                 </Form.Control>
+                <Form.Text className="text-danger">{errors.category}</Form.Text>
               </Form.Group>
             </div>
             <div className="col">
@@ -105,6 +153,7 @@ const ExpenseModal = ({ show, handleClose }) => {
                     })
                   }
                 </Form.Control>
+                <Form.Text className="text-danger">{errors.paymentMethod}</Form.Text>
               </Form.Group>
             </div>
             <div className="col">
@@ -125,6 +174,7 @@ const ExpenseModal = ({ show, handleClose }) => {
                     })
                   }
                 </Form.Control>
+                <Form.Text className="text-danger">{errors.paymentBank}</Form.Text>
               </Form.Group>
             </div>
           </div>
@@ -140,7 +190,7 @@ const ExpenseModal = ({ show, handleClose }) => {
             />
           </Form.Group>
           <div className="buttons-container">
-            <Button variant="primary" type="submit" className="save-button">
+            <Button variant="primary" type="submit" className="save-button" onClick={handleSubmit}>
               Save Expense
             </Button>
             <Button variant="secondary" onClick={handleClose} className="close-button">
