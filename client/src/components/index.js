@@ -4,7 +4,6 @@ import ExpenseCards from './ExpenseCards';
 import ExpenseList from './ExpenseList';
 import FormRow from './FormRow';
 import FormRowSelect from './FormRowSelect';
-import RangePickers from './RangePickers';
 
 export {
     Expense,
@@ -13,5 +12,4 @@ export {
     ExpenseList,
     FormRow,
     FormRowSelect,
-    RangePickers
 }

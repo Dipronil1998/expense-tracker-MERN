@@ -32,10 +32,15 @@ const AppProvider = ({ children }) => {
         });
     }
 
-    const getAllExpenses = async () => {
+    const getAllExpenses = async (fromDate,toDate) => {
         // dispatch({ type: GET_EXPENSES_BEGIN });
         try {
-            const url = `${baseUrl}/expenses`
+            let url;
+            if(fromDate && toDate){
+                url = `${baseUrl}/expenses?from=${fromDate.format("YYYY-MM-DD")}&to=${toDate.format("YYYY-MM-DD")}`
+            } else{
+                url = `${baseUrl}/expenses`
+            }
             const expensesResponse = await axios.get(url);
             dispatch({
                 type: GET_EXPENSES_SUCCESS,
@@ -44,7 +49,7 @@ const AppProvider = ({ children }) => {
                 },
             });
         } catch (error) {
-
+            console.log(error);
         }
     }
 
@@ -53,8 +58,12 @@ const AppProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        getAllExpenses()
-    }, [])
+        if (selectedDates.length === 2) {
+            getAllExpenses(selectedDates[0],selectedDates[1]);
+        } else {
+            getAllExpenses();
+        }
+    }, [selectedDates])
 
     return (
         <AppContext.Provider
