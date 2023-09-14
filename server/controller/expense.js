@@ -28,17 +28,13 @@ exports.addExpenses = async (req, res, next) => {
 
 exports.viewExpenses = async (req, res, next) => {
     try {
-        let query = {}; // Initialize an empty query object
-
-        // Check if the 'from' and 'to' query parameters exist
+        let query = {};
         if (req.query.from && req.query.to) {
-            // If both 'from' and 'to' are provided, create a date range query
             query.date = {
-                $gte: new Date(req.query.from),
-                $lte: new Date(req.query.to)
+                $gte: new Date(req.query.from).setHours(0, 0, 0, 0),
+                $lte: new Date(req.query.to).setHours(0, 0, 0, 0)
             };
         } else {
-            // If 'from' and 'to' are not provided, filter by today's date
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             const tomorrow = new Date(today);
@@ -50,7 +46,7 @@ exports.viewExpenses = async (req, res, next) => {
             };
         }
 
-        // Find expenses based on the constructed query
+        console.log(query);
         const expenses = await Expense.find(query).sort({ date: 1 });
 
         res.status(200).json({ response: expenses });
@@ -58,3 +54,6 @@ exports.viewExpenses = async (req, res, next) => {
         next(error);
     }
 }
+
+
+
