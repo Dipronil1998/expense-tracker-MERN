@@ -2,9 +2,12 @@ import React, { useState, useReducer, useContext, useEffect } from "react";
 import axios from 'axios';
 import Reducer from "./Reducer";
 import {
+    CREATE_EXPENSES_SUCCESS,
     GET_EXPENSES_BEGIN,
     GET_EXPENSES_SUCCESS,
     HANDLE_CHANGE,
+    CREATE_EXPENSES_BEGIN,
+    DELETE_EXPENSES_BEGIN,
 } from './Action'
 
 const initialState = {
@@ -13,6 +16,9 @@ const initialState = {
     validCategories: ["Stock", "Mutual fund", "Self", "Other"],
     validPaymentMethod: ["Cash", "Online"],
     validPaymentBank: ["SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"],
+    alertType: "",
+    alertText: "",
+    isExpensesCreate: false
 }
 
 const AppContext = React.createContext();
@@ -53,9 +59,33 @@ const AppProvider = ({ children }) => {
         }
     }
 
-    const createExpenses = async () => {
-
+    const createExpenses = async (values) => {
+        dispatch({ type: CREATE_EXPENSES_BEGIN });
+        try {
+            const url = `${baseUrl}/expenses`;
+            const expensesResponse = await axios.post(url, values);
+            console.log(expensesResponse,"expensesResponse");
+            dispatch({
+                type: CREATE_EXPENSES_SUCCESS,
+                payload: {
+                    expensesData: expensesResponse.data.message,
+                },
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
+
+    const deleteExpenses = async (id) => {
+        dispatch({ type: DELETE_EXPENSES_BEGIN })
+        try {
+          let url = `${baseUrl}/expenses/${id}`;
+          await axios.delete(url);
+          getAllExpenses();
+        } catch (error) {
+            console.log(error);
+        }
+      }
 
     useEffect(() => {
         if (selectedDates.length === 2) {
@@ -76,6 +106,7 @@ const AppProvider = ({ children }) => {
                 setSelectedDates,
                 tempSelectedDates,
                 setTempSelectedDates,
+                deleteExpenses
             }}
         >
             {children}

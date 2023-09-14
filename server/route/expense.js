@@ -6,6 +6,7 @@ const epensesController=require('../controller/expense');
 
 router.post('/',epensesController.addExpenses);
 router.get('/',epensesController.viewExpenses);
+router.delete('/:id',epensesController.deleteExpenses);
 
 
 module.exports = router;

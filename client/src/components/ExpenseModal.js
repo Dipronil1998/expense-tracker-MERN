@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import "../assets/css/ExpenseModal.css"
 import { useAppContext } from '../context/appContext';
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   title: "",
@@ -14,19 +15,23 @@ const initialState = {
 }
 
 const ExpenseModal = ({ show, handleClose }) => {
-  const [values, setValues]= useState(initialState)
+  const navigate = useNavigate();
+  const [values, setValues] = useState(initialState)
   const [errors, setErrors] = useState({});
-  const { 
+  const {
     isEditing,
     validCategories,
     validPaymentMethod,
     validPaymentBank,
-    handelChange
+    createExpenses,
+    isExpensesCreate,
+    alertType,
+    alertText
   } = useAppContext();
 
   const handleInput = (e) => {
     setErrors((prevErrors) => ({ ...prevErrors, [e.target.name]: '' }));
-    setValues({...values, [e.target.name]: e.target.value})
+    setValues({ ...values, [e.target.name]: e.target.value })
   };
 
   const validateForm = () => {
@@ -45,26 +50,30 @@ const ExpenseModal = ({ show, handleClose }) => {
     if (!values.paymentMethod) {
       newErrors.paymentMethod = 'Payment Method is required.';
     }
-    if(values.paymentMethod === "Online"){
-      if (!values.paymentBank) {
-        newErrors.paymentBank = 'Payment Bank is required.';
-      }
+    if (values.paymentMethod === "Online" && !values.paymentBank) {
+      newErrors.paymentBank = 'Payment Bank is required.';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
 
-  const handleSubmit = (e) =>{
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      if(isEditing){
+      if (isEditing) {
         console.log("edit");
         return
       }
-      console.log("add", values);
+      createExpenses(values);
     }
   }
+
+  useEffect(()=>{
+    if(isExpensesCreate){
+      navigate('/')
+    }
+  }, [isExpensesCreate])
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -95,8 +104,8 @@ const ExpenseModal = ({ show, handleClose }) => {
                   placeholder="yyyy-MM-dd"
                   pattern="\d{4}-\d{2}-\d{2}"
                   title="Please use the yyyy-MM-dd format"
-                // value={date}
-                onChange={handleInput}
+                  // value={date}
+                  onChange={handleInput}
                 />
                 <Form.Text className="text-danger">{errors.date}</Form.Text>
               </Form.Group>
@@ -167,8 +176,8 @@ const ExpenseModal = ({ show, handleClose }) => {
                 <Form.Control
                   as="select"
                   name="paymentBank"
-                // value={paymentBank}
-                onChange={handleInput}
+                  // value={paymentBank}
+                  onChange={handleInput}
                 >
                   <option value="">Select Bank</option>
                   {
@@ -190,8 +199,8 @@ const ExpenseModal = ({ show, handleClose }) => {
             <Form.Control
               as="textarea"
               name="description"
-            // value={description}
-            onChange={handleInput}
+              // value={description}
+              onChange={handleInput}
             />
           </Form.Group>
           <div className="buttons-container">

@@ -2,15 +2,16 @@ import React from 'react';
 import moment from 'moment';
 import '../assets/css/Expense.css';
 import { Button, message, Popconfirm } from 'antd';
+import { useAppContext } from '../context/appContext';
 
 const Expense = ({ expenseData }) => {
+  const {deleteExpenses} = useAppContext();
   const confirm = (e) => {
-    console.log(e);
-    message.success('Click on Yes');
+    deleteExpenses(expenseData._id);
+    message.success('Expenses delete successfully.');
   };
   const cancel = (e) => {
-    console.log(e);
-    message.error('Your Data is saved.');
+    message.info('Your Data is safed.');
   };
   return (
     <div className="parent-container">
@@ -20,16 +21,15 @@ const Expense = ({ expenseData }) => {
           <div className="expense-buttons">
             <button className="edit-button">Edit</button>
             <Popconfirm
-              title="Delete the task"
-              description="Are you sure to delete this task?"
+              title="Delete the Expenses"
+              description="Are you sure to delete this Expenses?"
               onConfirm={confirm}
               onCancel={cancel}
               okText="Yes"
               cancelText="No"
             >
-              <Button className="delete-button">Delete</Button>
+              <Button className="delete-button" >Delete</Button>
             </Popconfirm>
-            {/* <button className="delete-button">Delete</button> */}
           </div>
         </div>
         <p className="expense-details">
