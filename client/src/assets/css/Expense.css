@@ -60,8 +60,19 @@
     display: flex;
 }
 
-.edit-button,
+
 .delete-button {
+    background-color: #ea0c0c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-left: 8px;
+    cursor: pointer;
+    height: auto;
+}
+
+.edit-button {
     background-color: #333;
     color: #fff;
     border: none;
