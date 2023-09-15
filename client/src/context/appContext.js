@@ -38,12 +38,33 @@ const AppProvider = ({ children }) => {
         });
     }
 
-    const getAllExpenses = async (fromDate,toDate) => {
+    // const getAllExpenses = async (fromDate,toDate) => {
+    //     // dispatch({ type: GET_EXPENSES_BEGIN });
+    //     try {
+    //         let url;
+    //         if(fromDate && toDate){
+    //             url = `${baseUrl}/expenses?from=${fromDate.format("YYYY-MM-DD")}&to=${toDate.format("YYYY-MM-DD")}`
+    //         } else{
+    //             url = `${baseUrl}/expenses`
+    //         }
+    //         const expensesResponse = await axios.get(url);
+    //         dispatch({
+    //             type: GET_EXPENSES_SUCCESS,
+    //             payload: {
+    //                 expensesData: expensesResponse.data.response,
+    //             },
+    //         });
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
+    const getAllExpenses = async (selectedDates) => {
         // dispatch({ type: GET_EXPENSES_BEGIN });
         try {
             let url;
-            if(fromDate && toDate){
-                url = `${baseUrl}/expenses?from=${fromDate.format("YYYY-MM-DD")}&to=${toDate.format("YYYY-MM-DD")}`
+            if(selectedDates.length > 0){
+                url = `${baseUrl}/expenses?from=${selectedDates[0].format("YYYY-MM-DD")}&to=${selectedDates[1].format("YYYY-MM-DD")}`
             } else{
                 url = `${baseUrl}/expenses`
             }
@@ -81,18 +102,19 @@ const AppProvider = ({ children }) => {
         try {
           let url = `${baseUrl}/expenses/${id}`;
           await axios.delete(url);
-          getAllExpenses();
+          getAllExpenses(selectedDates);
         } catch (error) {
             console.log(error);
         }
       }
 
     useEffect(() => {
-        if (selectedDates.length === 2) {
-            getAllExpenses(selectedDates[0],selectedDates[1]);
-        } else {
-            getAllExpenses();
-        }
+        // if (selectedDates.length === 2) {
+        //     getAllExpenses(selectedDates[0],selectedDates[1]);
+        // } else {
+        //     getAllExpenses();
+        // }
+        getAllExpenses(selectedDates)
     }, [selectedDates])
 
     return (

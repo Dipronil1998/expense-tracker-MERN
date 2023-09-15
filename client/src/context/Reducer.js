@@ -34,6 +34,11 @@ const Reducer = (state, action) => {
             alertText: 'Expenses create successfully.',
         }
     }
+    if (action.type === DELETE_EXPENSES_BEGIN) {
+        return {
+          ...state,
+        }
+      }
 }
 
 export default Reducer;
