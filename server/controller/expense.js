@@ -2,7 +2,7 @@ const Expense = require("../model/expense")
 exports.addExpenses = async (req, res, next) => {
     try {
         const title = req.body.title;
-        const date = req.body.date ? new Date(req.body.date) : new Date().setHours(0, 0, 0, 0);
+        const date = req.body.date ? new Date(req.body.date).setHours(0, 0, 0, 0) : new Date().setHours(0, 0, 0, 0);
         const amount = req.body.amount;
         const category = req.body.category;
         const paymentMethod = req.body.paymentMethod;
