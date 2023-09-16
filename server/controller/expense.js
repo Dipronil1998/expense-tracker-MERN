@@ -108,7 +108,7 @@ exports.viewExpenses = async (req, res, next) => {
             };
         }
 
-        const expenses = await Expense.find(query).sort({ date: 1 });
+        const expenses = await Expense.find(query).sort({ date: -1 });
 
         const categoryValues = [];
 
@@ -136,7 +136,7 @@ exports.viewExpenses = async (req, res, next) => {
                 : 0;
 
             const response = {
-                title: `total ${validCategory} investment this month`,
+                title: `total ${validCategory} expenses this month`,
                 text: totalValidCategorieExpensesMonthwise
             };
             categoryValues.push(response);

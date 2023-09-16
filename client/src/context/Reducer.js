@@ -19,6 +19,7 @@ const Reducer = (state, action) => {
         return {
             ...state,
             expensesData: action.payload.expensesData,
+            cardData: action.payload.cardData,
         };
     }
     if (action.type === CREATE_EXPENSES_BEGIN) {

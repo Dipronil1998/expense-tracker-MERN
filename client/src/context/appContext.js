@@ -14,6 +14,7 @@ import {
 const initialState = {
     isEditing: false,
     expensesData: [],
+    cardData:[],
     validCategories: ["Stock", "Mutual fund", "Self", "Other"],
     validPaymentMethod: ["Cash", "Online"],
     validPaymentBank: ["SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"],
@@ -75,6 +76,7 @@ const AppProvider = ({ children }) => {
                 type: GET_EXPENSES_SUCCESS,
                 payload: {
                     expensesData: expensesResponse.data.response,
+                    cardData: expensesResponse.data.cardResponse,
                 },
             });
         } catch (error) {
@@ -93,6 +95,7 @@ const AppProvider = ({ children }) => {
                     expensesData: expensesResponse.data.message,
                 },
             });
+            getAllExpenses(selectedDates);
         } catch (error) {
             console.log(error);
         }
@@ -120,7 +123,7 @@ const AppProvider = ({ children }) => {
         //     getAllExpenses();
         // }
         getAllExpenses(selectedDates)
-    }, [state,selectedDates])
+    }, [selectedDates])
 
     return (
         <AppContext.Provider
