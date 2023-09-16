@@ -19,18 +19,22 @@ const buttonGap = {
 }
 
 const AddExpenseButton = () => {
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
   const { selectedDates,
     setSelectedDates,
     tempSelectedDates,
-    setTempSelectedDates,getAllExpenses } = useAppContext();
+    setTempSelectedDates,
+    getAllExpenses,
+    showModal,
+    toggleModal
+   } = useAppContext();
 
   const openModal = () => {
-    setShowModal(true);
+    toggleModal()
   };
 
   const closeModal = () => {
-    setShowModal(false);
+    toggleModal()
   };
 
   const handleDateChange = (dates) => {

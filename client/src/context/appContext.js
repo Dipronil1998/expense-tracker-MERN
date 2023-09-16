@@ -8,6 +8,7 @@ import {
     HANDLE_CHANGE,
     CREATE_EXPENSES_BEGIN,
     DELETE_EXPENSES_BEGIN,
+    TOGGLE_MODAL,
 } from './Action'
 
 const initialState = {
@@ -18,7 +19,8 @@ const initialState = {
     validPaymentBank: ["SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"],
     alertType: "",
     alertText: "",
-    isExpensesCreate: false
+    isExpensesCreate: false,
+    showModal: false
 }
 
 const AppContext = React.createContext();
@@ -108,6 +110,10 @@ const AppProvider = ({ children }) => {
         }
       }
 
+      const toggleModal = () => {
+        dispatch({ type: TOGGLE_MODAL })
+      }
+
     useEffect(() => {
         // if (selectedDates.length === 2) {
         //     getAllExpenses(selectedDates[0],selectedDates[1]);
@@ -128,7 +134,8 @@ const AppProvider = ({ children }) => {
                 setSelectedDates,
                 tempSelectedDates,
                 setTempSelectedDates,
-                deleteExpenses
+                deleteExpenses,
+                toggleModal
             }}
         >
             {children}

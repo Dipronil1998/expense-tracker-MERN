@@ -5,6 +5,7 @@ import {
     HANDLE_CHANGE,
     CREATE_EXPENSES_BEGIN,
     DELETE_EXPENSES_BEGIN,
+    TOGGLE_MODAL,
 } from './Action'
 
 const Reducer = (state, action) => {
@@ -20,25 +21,31 @@ const Reducer = (state, action) => {
             expensesData: action.payload.expensesData,
         };
     }
-    if(action.type === CREATE_EXPENSES_BEGIN){
+    if (action.type === CREATE_EXPENSES_BEGIN) {
         return {
             ...state,
-            isExpensesCreate:false,
+            isExpensesCreate: false,
         }
     }
-    if(action.type === CREATE_EXPENSES_SUCCESS){
+    if (action.type === CREATE_EXPENSES_SUCCESS) {
         return {
             ...state,
-            isExpensesCreate:true,
+            isExpensesCreate: true,
             alertType: "success",
             alertText: 'Expenses create successfully.',
         }
     }
     if (action.type === DELETE_EXPENSES_BEGIN) {
         return {
-          ...state,
+            ...state,
         }
-      }
+    }
+    if (action.type === TOGGLE_MODAL) {
+        return {
+            ...state,
+            showModal: !state.showModal
+        }
+    }
 }
 
 export default Reducer;
