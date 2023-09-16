@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-
-const validCategories = ["Stock", "Mutual fund", "Self", "Other"];
-const validPaymentMethod = ["Cash", "Online"];
-const validPaymentBank = ["","SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"];
+const {validCategories,
+    validPaymentMethod,
+    validPaymentBank} = require('../interface/dbEnum');
 
 const expensesSchema = new mongoose.Schema({
     title: {
