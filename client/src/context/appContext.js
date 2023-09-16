@@ -87,7 +87,6 @@ const AppProvider = ({ children }) => {
         try {
             const url = `${baseUrl}/expenses`;
             const expensesResponse = await axios.post(url, values);
-            console.log(expensesResponse,"expensesResponse");
             dispatch({
                 type: CREATE_EXPENSES_SUCCESS,
                 payload: {
@@ -121,7 +120,7 @@ const AppProvider = ({ children }) => {
         //     getAllExpenses();
         // }
         getAllExpenses(selectedDates)
-    }, [selectedDates])
+    }, [state,selectedDates])
 
     return (
         <AppContext.Provider

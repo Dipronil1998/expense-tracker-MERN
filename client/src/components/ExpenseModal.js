@@ -3,6 +3,8 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import "../assets/css/ExpenseModal.css"
 import { useAppContext } from '../context/appContext';
 import { useNavigate } from "react-router-dom";
+import { message } from 'antd';
+import { format } from 'date-fns';
 
 const initialState = {
   title: "",
@@ -16,6 +18,7 @@ const initialState = {
 
 const ExpenseModal = ({ show, handleClose }) => {
   const navigate = useNavigate();
+  const currentDate = format(new Date(), 'yyyy-MM-dd');
   const [values, setValues] = useState(initialState)
   const [errors, setErrors] = useState({});
   const {
@@ -66,6 +69,8 @@ const ExpenseModal = ({ show, handleClose }) => {
         return
       }
       createExpenses(values);
+      message.success('Expenses create successfully.');
+      // message.alertType('Expenses delete successfully.');
     }
   }
 
@@ -106,6 +111,7 @@ const ExpenseModal = ({ show, handleClose }) => {
                   title="Please use the yyyy-MM-dd format"
                   // value={date}
                   onChange={handleInput}
+                  max={currentDate} 
                 />
                 <Form.Text className="text-danger">{errors.date}</Form.Text>
               </Form.Group>

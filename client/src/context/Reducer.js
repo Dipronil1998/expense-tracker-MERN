@@ -30,6 +30,7 @@ const Reducer = (state, action) => {
     if (action.type === CREATE_EXPENSES_SUCCESS) {
         return {
             ...state,
+            showModal: !state.showModal,
             isExpensesCreate: true,
             alertType: "success",
             alertText: 'Expenses create successfully.',
