@@ -34,36 +34,17 @@ const AppProvider = ({ children }) => {
     const [tempSelectedCategoryFilter, setTempSelectedCategoryFilter] = useState([]);
     const baseUrl = "http://localhost:3001/api/v1"
 
-
-    // const getAllExpenses = async (fromDate,toDate) => {
-    //     // dispatch({ type: GET_EXPENSES_BEGIN });
-    //     try {
-    //         let url;
-    //         if(fromDate && toDate){
-    //             url = `${baseUrl}/expenses?from=${fromDate.format("YYYY-MM-DD")}&to=${toDate.format("YYYY-MM-DD")}`
-    //         } else{
-    //             url = `${baseUrl}/expenses`
-    //         }
-    //         const expensesResponse = await axios.get(url);
-    //         dispatch({
-    //             type: GET_EXPENSES_SUCCESS,
-    //             payload: {
-    //                 expensesData: expensesResponse.data.response,
-    //             },
-    //         });
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
-    const getAllExpenses = async (selectedDates) => {
+    const getAllExpenses = async (selectedDates, selectedCategoryFilter) => {
         // dispatch({ type: GET_EXPENSES_BEGIN });
         try {
-            let url;
+            console.log(selectedCategoryFilter.length,"selectedCategoryFilter");
+            let url=`${baseUrl}/expenses?`;
             if (selectedDates.length > 0) {
-                url = `${baseUrl}/expenses?from=${selectedDates[0].format("YYYY-MM-DD")}&to=${selectedDates[1].format("YYYY-MM-DD")}`
-            } else {
-                url = `${baseUrl}/expenses`
+                url = url + `from=${selectedDates[0].format("YYYY-MM-DD")}&to=${selectedDates[1].format("YYYY-MM-DD")}`
+            }
+            if (selectedCategoryFilter.length > 0) {
+                const categoryFilterString = JSON.stringify(selectedCategoryFilter);
+                url = url + `&categoryFilter=${categoryFilterString}`;
             }
             const expensesResponse = await axios.get(url);
             dispatch({
@@ -89,7 +70,7 @@ const AppProvider = ({ children }) => {
                     expensesData: expensesResponse.data.message,
                 },
             });
-            getAllExpenses(selectedDates);
+            getAllExpenses(selectedDates,selectedCategoryFilter);
         } catch (error) {
             console.log(error);
         }
@@ -111,13 +92,8 @@ const AppProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        // if (selectedDates.length === 2) {
-        //     getAllExpenses(selectedDates[0],selectedDates[1]);
-        // } else {
-        //     getAllExpenses();
-        // }
-        getAllExpenses(selectedDates)
-    }, [selectedDates])
+        getAllExpenses(selectedDates,selectedCategoryFilter)
+    }, [selectedDates,selectedCategoryFilter])
 
     return (
         <AppContext.Provider

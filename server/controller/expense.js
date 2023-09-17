@@ -26,66 +26,6 @@ exports.addExpenses = async (req, res, next) => {
     }
 }
 
-
-// exports.viewExpenses = async (req, res, next) => {
-//     try {
-//         let query = {};
-//         const cardResponse = [];
-//         const today = new Date();
-//         today.setHours(0, 0, 0, 0);
-//         const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-
-//         if (req.query.from && req.query.to) {
-//             query.date = {
-//                 $gte: new Date(req.query.from).setHours(0, 0, 0, 0),
-//                 $lte: new Date(req.query.to).setHours(0, 0, 0, 0)
-//             };
-//         } else {
-//             const tomorrow = new Date(today);
-//             tomorrow.setDate(today.getDate() + 1);
-
-//             query.date = {
-//                 $gte: today,
-//                 $lt: tomorrow
-//             };
-//         }
-
-//         const expenses = await Expense.find(query).sort({ date: 1 });
-
-//         const categoryValues = await Promise.all(validCategories.map(async (validCategory) => {
-//             const validCategorieExpensesMonthwise = await Expense.aggregate([
-//                 {
-//                     $match: {
-//                         category: validCategory,
-//                         date: {
-//                             $gte: firstDayOfMonth,
-//                             $lte: today
-//                         }
-//                     }
-//                 },
-//                 {
-//                     $group: {
-//                         _id: null,
-//                         totalAmount: { $sum: "$amount" }
-//                     }
-//                 }
-//             ]);
-
-//             const totalValidCategorieExpensesMonthwise = validCategorieExpensesMonthwise.length > 0
-//                 ? validCategorieExpensesMonthwise[0].totalAmount
-//                 : 0;
-
-//             return {
-//                 title: `total ${validCategory} investment this month`,
-//                 text: totalValidCategorieExpensesMonthwise
-//             };
-//         }));
-//         res.status(200).json({ response: expenses, cardResponse:categoryValues });
-//     } catch (error) {
-//         next(error);
-//     }
-// }
-
 exports.viewExpenses = async (req, res, next) => {
     try {
         let query = {};
