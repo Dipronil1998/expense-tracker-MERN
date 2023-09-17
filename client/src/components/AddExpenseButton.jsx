@@ -69,8 +69,7 @@ const AddExpenseButton = () => {
     setSelectedCategoryFilter([]);
     setTempSelectedCategoryFilter([]);
 
-    // Reset the value of the Select component to clear selected values
-    document.querySelector('.ant-select-selector').click(); // Click to open the dropdown
+    document.querySelector('.ant-select-selector').click(); 
   };
 
   return (
