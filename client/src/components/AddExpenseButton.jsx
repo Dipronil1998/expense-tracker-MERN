@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ExpenseModal from './ExpenseModal';
 import { useAppContext } from '../context/appContext';
-import { DatePicker, Space } from 'antd';
+import { DatePicker, Space, Select } from 'antd';
+
 const { RangePicker } = DatePicker;
 
 const buttonStyle = {
@@ -11,74 +12,105 @@ const buttonStyle = {
   display: 'flex',
   flexDirection: 'row',
   marginRight: '5%',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
 };
 
 const buttonGap = {
-  marginLeft: '10px'
-}
+  marginLeft: '10px',
+};
 
 const AddExpenseButton = () => {
-  // const [showModal, setShowModal] = useState(false);
-  const { selectedDates,
+  const options = [];
+  const {
+    selectedDates,
     setSelectedDates,
     tempSelectedDates,
     setTempSelectedDates,
-    getAllExpenses,
     showModal,
-    toggleModal
-   } = useAppContext();
+    toggleModal,
+    validCategories,
+    selectedCategoryFilter,
+    setSelectedCategoryFilter,
+    tempSelectedCategoryFilter,
+    setTempSelectedCategoryFilter,
+  } = useAppContext();
+
+  validCategories.map((validCategory) => {
+    options.push({
+      label: validCategory,
+      value: validCategory,
+    });
+  });
 
   const openModal = () => {
-    toggleModal()
+    toggleModal();
   };
 
   const closeModal = () => {
-    toggleModal()
+    toggleModal();
   };
 
   const handleDateChange = (dates) => {
-    setTempSelectedDates(dates); 
+    setTempSelectedDates(dates);
+  };
+
+  const handleChange = (value) => {
+    setTempSelectedCategoryFilter(value);
   };
 
   const applyDateChange = () => {
-    setSelectedDates(tempSelectedDates); 
+    setSelectedDates(tempSelectedDates);
+    setSelectedCategoryFilter(tempSelectedCategoryFilter);
   };
 
   const cancelDateChange = () => {
     setSelectedDates([]);
     setTempSelectedDates([]);
+    setSelectedCategoryFilter([]);
+    setTempSelectedCategoryFilter([]);
+
+    // Reset the value of the Select component to clear selected values
+    document.querySelector('.ant-select-selector').click(); // Click to open the dropdown
   };
-  
 
   return (
     <div style={buttonStyle}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        {/* <RangePickers /> */}
-        <Space direction="vertical" size={12}>
+        <Space style={{ width: '50%' }} direction="vertical">
+          <Select
+            mode="multiple"
+            allowClear={false}
+            style={{ width: '100%' }}
+            placeholder="Please select"
+            value={tempSelectedCategoryFilter} // Use value prop to control selected values
+            onChange={handleChange}
+            options={options}
+          />
+        </Space>
+        <Space style={{ width: '100%', marginLeft: "10px" }} direction="vertical" size={30}>
           <RangePicker
             value={tempSelectedDates}
             onChange={handleDateChange}
             allowClear={false}
+            className="custom-range-picker"
           />
         </Space>
         <div style={buttonGap}>
-          <Button variant="info" onClick={applyDateChange}>Apply</Button>
+          <Button variant="info" onClick={applyDateChange}>
+            Apply
+          </Button>
         </div>
         <div style={buttonGap}>
-          <Button variant="danger" onClick={cancelDateChange}>Cancel</Button>
+          <Button variant="danger" onClick={cancelDateChange}>
+            Cancel
+          </Button>
         </div>
       </div>
       <div className="">
-
-        <Button
-          variant="primary"
-          onClick={openModal}
-        >
+        <Button variant="primary" onClick={openModal}>
           Add Expense
         </Button>
       </div>
-
       {/* Render the ExpenseModal component */}
       <ExpenseModal show={showModal} handleClose={closeModal} />
     </div>

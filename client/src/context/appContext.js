@@ -14,7 +14,7 @@ import {
 const initialState = {
     isEditing: false,
     expensesData: [],
-    cardData:[],
+    cardData: [],
     validCategories: ["Stock", "Mutual fund", "Self", "Other"],
     validPaymentMethod: ["Cash", "Online"],
     validPaymentBank: ["SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"],
@@ -30,16 +30,10 @@ const AppProvider = ({ children }) => {
     const [state, dispatch] = useReducer(Reducer, initialState);
     const [selectedDates, setSelectedDates] = useState([]);
     const [tempSelectedDates, setTempSelectedDates] = useState([]);
+    const [selectedCategoryFilter, setSelectedCategoryFilter] = useState([]);
+    const [tempSelectedCategoryFilter, setTempSelectedCategoryFilter] = useState([]);
     const baseUrl = "http://localhost:3001/api/v1"
 
-    const handelChange = ({ name, value }) => {
-        dispatch({
-            type: HANDLE_CHANGE,
-            payload: {
-                name, value
-            }
-        });
-    }
 
     // const getAllExpenses = async (fromDate,toDate) => {
     //     // dispatch({ type: GET_EXPENSES_BEGIN });
@@ -66,9 +60,9 @@ const AppProvider = ({ children }) => {
         // dispatch({ type: GET_EXPENSES_BEGIN });
         try {
             let url;
-            if(selectedDates.length > 0){
+            if (selectedDates.length > 0) {
                 url = `${baseUrl}/expenses?from=${selectedDates[0].format("YYYY-MM-DD")}&to=${selectedDates[1].format("YYYY-MM-DD")}`
-            } else{
+            } else {
                 url = `${baseUrl}/expenses`
             }
             const expensesResponse = await axios.get(url);
@@ -104,17 +98,17 @@ const AppProvider = ({ children }) => {
     const deleteExpenses = async (id) => {
         dispatch({ type: DELETE_EXPENSES_BEGIN })
         try {
-          let url = `${baseUrl}/expenses/${id}`;
-          await axios.delete(url);
-          getAllExpenses(selectedDates);
+            let url = `${baseUrl}/expenses/${id}`;
+            await axios.delete(url);
+            getAllExpenses(selectedDates);
         } catch (error) {
             console.log(error);
         }
-      }
+    }
 
-      const toggleModal = () => {
+    const toggleModal = () => {
         dispatch({ type: TOGGLE_MODAL })
-      }
+    }
 
     useEffect(() => {
         // if (selectedDates.length === 2) {
@@ -129,7 +123,6 @@ const AppProvider = ({ children }) => {
         <AppContext.Provider
             value={{
                 ...state,
-                handelChange,
                 getAllExpenses,
                 createExpenses,
                 selectedDates,
@@ -137,7 +130,11 @@ const AppProvider = ({ children }) => {
                 tempSelectedDates,
                 setTempSelectedDates,
                 deleteExpenses,
-                toggleModal
+                toggleModal,
+                selectedCategoryFilter,
+                setSelectedCategoryFilter,
+                tempSelectedCategoryFilter,
+                setTempSelectedCategoryFilter,
             }}
         >
             {children}
