@@ -6,6 +6,8 @@ import {
     DELETE_EXPENSES_BEGIN,
     TOGGLE_MODAL,
     SET_EDIT_EXPENSES,
+    UPDATE_EXPENSES_SUCCESS,
+    GET_EXPENSES_BEGIN
 } from './Action'
 
 const Reducer = (state, action) => {
@@ -18,6 +20,7 @@ const Reducer = (state, action) => {
     if (action.type === GET_EXPENSES_SUCCESS) {
         return {
             ...state,
+            isLoading:false,
             expensesData: action.payload.expensesData,
             cardData: action.payload.cardData,
         };
@@ -57,6 +60,20 @@ const Reducer = (state, action) => {
             isEditing: true,
             showModal: !state.showModal,
             expenses: action.payload.expenses
+        }
+    }
+    if (action.type === UPDATE_EXPENSES_SUCCESS) {
+        return {
+            ...state,
+            isEditing: false,
+            showModal: !state.showModal,
+            expenses: ""
+        }
+    }
+    if (action.type === GET_EXPENSES_BEGIN) {
+        return {
+            ...state,
+            isLoading:true,
         }
     }
 }

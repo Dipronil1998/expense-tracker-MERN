@@ -1,6 +1,7 @@
 import React from 'react';
 import Expense from './Expense'; // Import the Expense component
 import { useAppContext } from '../context/appContext';
+import Loader from './Loader';
 
 const noDataMessageStyle = {
   color: '#888',
@@ -10,8 +11,12 @@ const noDataMessageStyle = {
 };
 
 const ExpenseList = () => {
-  const { expensesData } = useAppContext();
-  
+  const { expensesData, isLoading } = useAppContext();
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <div>
       {expensesData?.length === 0 ? (

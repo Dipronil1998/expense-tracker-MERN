@@ -64,7 +64,7 @@ const ExpenseModal = ({ show, handleClose }) => {
     e.preventDefault();
     if (validateForm()) {
       if (isEditing) {
-        console.log("edit");
+        console.log("edit", values);
         return
       }
       createExpenses(values);

@@ -8,9 +8,12 @@ import {
     DELETE_EXPENSES_BEGIN,
     TOGGLE_MODAL,
     SET_EDIT_EXPENSES,
+    UPDATE_EXPENSES_SUCCESS,
+    GET_EXPENSES_BEGIN,
 } from './Action'
 
 const initialState = {
+    isLoading:false,
     isEditing: false,
     expensesData: [],
     cardData: [],
@@ -35,7 +38,7 @@ const AppProvider = ({ children }) => {
     const baseUrl = "http://localhost:3001/api/v1"
 
     const getAllExpenses = async (selectedDates, selectedCategoryFilter) => {
-        // dispatch({ type: GET_EXPENSES_BEGIN });
+        dispatch({ type: GET_EXPENSES_BEGIN });
         try {
             let url=`${baseUrl}/expenses?`;
             if (selectedDates.length > 0) {
@@ -106,6 +109,21 @@ const AppProvider = ({ children }) => {
         }
     }
 
+    const updateExpenses = async (values) => {
+        // dispatch({ type: CREATE_EXPENSES_BEGIN });
+        try {
+            const { _id, ...newValues } = values;
+            const url = `${baseUrl}/expenses/${_id}`;
+            await axios.put(url, newValues);
+            dispatch({
+                type: UPDATE_EXPENSES_SUCCESS,
+            });
+            // getAllExpenses(selectedDates,selectedCategoryFilter);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         getAllExpenses(selectedDates,selectedCategoryFilter)
     }, [selectedDates,selectedCategoryFilter])
@@ -127,6 +145,7 @@ const AppProvider = ({ children }) => {
                 tempSelectedCategoryFilter,
                 setTempSelectedCategoryFilter,
                 setEditExpenses,
+                updateExpenses
             }}
         >
             {children}
