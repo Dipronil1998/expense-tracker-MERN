@@ -117,4 +117,18 @@ exports.deleteExpenses = async (req,res,next)=>{
     }
 }
 
+exports.viewExpensesById = async (req,res,next)=>{
+    try {
+       const _id = req.params.id;
+       const expenses = await Expense.findOne({_id:_id});
+       if(expenses){
+        return res.status(200).json({ response: expenses });
+       } else {
+        return res.status(404).json({ message: "Expenses not found" });
+       }
+    } catch (error) {
+        
+    }
+}
+
 

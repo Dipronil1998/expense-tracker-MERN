@@ -41,7 +41,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3001/api/v1/expenses?categoryFilter=[\"Stock\", \"Mutual fund\",\"Other\"]",
+					"raw": "localhost:3001/api/v1/expenses",
 					"host": [
 						"localhost"
 					],
@@ -64,7 +64,8 @@
 						},
 						{
 							"key": "categoryFilter",
-							"value": "[\"Stock\", \"Mutual fund\",\"Other\"]"
+							"value": "[\"Stock\", \"Mutual fund\",\"Other\"]",
+							"disabled": true
 						}
 					]
 				}
@@ -87,6 +88,27 @@
 						"v1",
 						"expenses",
 						"650338c2e4971fc720e430f4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get expenses by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3001/api/v1/expenses/6506776c5b1698881e37763c",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"v1",
+						"expenses",
+						"6506776c5b1698881e37763c"
 					]
 				}
 			},
