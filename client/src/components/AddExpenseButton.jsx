@@ -81,7 +81,7 @@ const AddExpenseButton = () => {
             allowClear={false}
             style={{ width: '100%' }}
             placeholder="Please select"
-            value={tempSelectedCategoryFilter} // Use value prop to control selected values
+            value={tempSelectedCategoryFilter} 
             onChange={handleChange}
             options={options}
           />
