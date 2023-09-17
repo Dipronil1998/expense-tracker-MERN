@@ -3,18 +3,18 @@ import axios from 'axios';
 import Reducer from "./Reducer";
 import {
     CREATE_EXPENSES_SUCCESS,
-    GET_EXPENSES_BEGIN,
     GET_EXPENSES_SUCCESS,
-    HANDLE_CHANGE,
     CREATE_EXPENSES_BEGIN,
     DELETE_EXPENSES_BEGIN,
     TOGGLE_MODAL,
+    SET_EDIT_EXPENSES,
 } from './Action'
 
 const initialState = {
     isEditing: false,
     expensesData: [],
     cardData: [],
+    expenses:"",
     validCategories: ["Stock", "Mutual fund", "Self", "Other"],
     validPaymentMethod: ["Cash", "Online"],
     validPaymentBank: ["SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"],
@@ -37,7 +37,6 @@ const AppProvider = ({ children }) => {
     const getAllExpenses = async (selectedDates, selectedCategoryFilter) => {
         // dispatch({ type: GET_EXPENSES_BEGIN });
         try {
-            console.log(selectedCategoryFilter.length,"selectedCategoryFilter");
             let url=`${baseUrl}/expenses?`;
             if (selectedDates.length > 0) {
                 url = url + `from=${selectedDates[0].format("YYYY-MM-DD")}&to=${selectedDates[1].format("YYYY-MM-DD")}`
@@ -81,7 +80,7 @@ const AppProvider = ({ children }) => {
         try {
             let url = `${baseUrl}/expenses/${id}`;
             await axios.delete(url);
-            getAllExpenses(selectedDates);
+            getAllExpenses(selectedDates,selectedCategoryFilter);
         } catch (error) {
             console.log(error);
         }
@@ -89,6 +88,22 @@ const AppProvider = ({ children }) => {
 
     const toggleModal = () => {
         dispatch({ type: TOGGLE_MODAL })
+    }
+
+    const setEditExpenses = async (id) => {
+        // dispatch({ type: SET_EDIT_EXPENSES })
+        try {
+            let url = `${baseUrl}/expenses/${id}`;
+            const response = await axios.get(url);
+            dispatch({ 
+                type: SET_EDIT_EXPENSES,
+                payload:{
+                    expenses:response.data.response
+                }
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {
@@ -111,6 +126,7 @@ const AppProvider = ({ children }) => {
                 setSelectedCategoryFilter,
                 tempSelectedCategoryFilter,
                 setTempSelectedCategoryFilter,
+                setEditExpenses,
             }}
         >
             {children}

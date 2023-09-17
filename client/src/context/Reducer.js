@@ -1,11 +1,11 @@
 import {
     CREATE_EXPENSES_SUCCESS,
-    GET_EXPENSES_BEGIN,
     GET_EXPENSES_SUCCESS,
     HANDLE_CHANGE,
     CREATE_EXPENSES_BEGIN,
     DELETE_EXPENSES_BEGIN,
     TOGGLE_MODAL,
+    SET_EDIT_EXPENSES,
 } from './Action'
 
 const Reducer = (state, action) => {
@@ -26,6 +26,7 @@ const Reducer = (state, action) => {
         return {
             ...state,
             isExpensesCreate: false,
+            isEditing: false,
         }
     }
     if (action.type === CREATE_EXPENSES_SUCCESS) {
@@ -45,7 +46,17 @@ const Reducer = (state, action) => {
     if (action.type === TOGGLE_MODAL) {
         return {
             ...state,
-            showModal: !state.showModal
+            showModal: !state.showModal,
+            expenses:"",
+            isEditing: false,
+        }
+    }
+    if (action.type === SET_EDIT_EXPENSES) {
+        return {
+            ...state,
+            isEditing: true,
+            showModal: !state.showModal,
+            expenses: action.payload.expenses
         }
     }
 }

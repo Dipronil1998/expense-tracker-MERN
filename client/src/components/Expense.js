@@ -5,7 +5,7 @@ import { Button, message, Popconfirm } from 'antd';
 import { useAppContext } from '../context/appContext';
 
 const Expense = ({ expenseData }) => {
-  const {deleteExpenses} = useAppContext();
+  const {deleteExpenses, setEditExpenses} = useAppContext();
   const confirm = (e) => {
     deleteExpenses(expenseData._id);
     message.success('Expenses delete successfully.');
@@ -19,7 +19,7 @@ const Expense = ({ expenseData }) => {
         <div className="expense-header">
           <h3>{expenseData.title}</h3>
           <div className="expense-buttons">
-            <button className="edit-button">Edit</button>
+            <button className="edit-button" onClick={() => setEditExpenses(expenseData._id)}>Edit</button>
             <Popconfirm
               title="Delete the Expenses"
               description="Are you sure to delete this Expenses?"

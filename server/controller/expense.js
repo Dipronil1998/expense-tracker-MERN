@@ -96,7 +96,6 @@ exports.viewExpenses = async (req, res, next) => {
 
         res.status(200).json({ response: expenses, cardResponse: categoryValues });
     } catch (error) {
-        console.log(error);
         next(error);
     }
 }

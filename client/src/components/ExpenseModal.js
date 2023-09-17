@@ -28,8 +28,7 @@ const ExpenseModal = ({ show, handleClose }) => {
     validPaymentBank,
     createExpenses,
     isExpensesCreate,
-    alertType,
-    alertText
+    expenses,
   } = useAppContext();
 
   const handleInput = (e) => {
@@ -75,10 +74,13 @@ const ExpenseModal = ({ show, handleClose }) => {
   }
 
   useEffect(()=>{
+    if (expenses) {
+      setValues(expenses);
+    }
     if(isExpensesCreate){
       navigate('/')
     }
-  }, [isExpensesCreate])
+  }, [isExpensesCreate, expenses])
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -92,7 +94,7 @@ const ExpenseModal = ({ show, handleClose }) => {
             <Form.Control
               type="text"
               name="title"
-              // value={title}
+              value={expenses?.title}
               onChange={handleInput}
               required
             />
@@ -109,7 +111,7 @@ const ExpenseModal = ({ show, handleClose }) => {
                   placeholder="yyyy-MM-dd"
                   pattern="\d{4}-\d{2}-\d{2}"
                   title="Please use the yyyy-MM-dd format"
-                  // value={date}
+                  value={expenses.date ? format(new Date(expenses.date), 'yyyy-MM-dd') : ''}
                   onChange={handleInput}
                   max={currentDate} 
                 />
@@ -122,7 +124,7 @@ const ExpenseModal = ({ show, handleClose }) => {
                 <Form.Control
                   type="number"
                   name="amount"
-                  // value={amount}
+                  value={expenses?.amount}
                   onChange={handleInput}
                   required
                 />
@@ -138,7 +140,7 @@ const ExpenseModal = ({ show, handleClose }) => {
                 <Form.Control
                   as="select"
                   name="category"
-                  // value={category}
+                  value={expenses?.category}
                   onChange={handleInput}
                   required
                 >
@@ -160,7 +162,7 @@ const ExpenseModal = ({ show, handleClose }) => {
                 <Form.Control
                   as="select"
                   name="paymentMethod"
-                  // value={paymentMethod}
+                  value={expenses?.paymentMethod}
                   onChange={handleInput}
                   required
                 >
@@ -182,7 +184,7 @@ const ExpenseModal = ({ show, handleClose }) => {
                 <Form.Control
                   as="select"
                   name="paymentBank"
-                  // value={paymentBank}
+                  value={expenses?.paymentBank}
                   onChange={handleInput}
                 >
                   <option value="">Select Bank</option>
@@ -205,13 +207,13 @@ const ExpenseModal = ({ show, handleClose }) => {
             <Form.Control
               as="textarea"
               name="description"
-              // value={description}
+              value={expenses?.description}
               onChange={handleInput}
             />
           </Form.Group>
           <div className="buttons-container">
             <Button variant="primary" type="submit" className="save-button" onClick={handleSubmit}>
-              Save Expense
+            {isEditing ? 'Update' : 'Save'} Expenses
             </Button>
             <Button variant="secondary" onClick={handleClose} className="close-button">
               Close
