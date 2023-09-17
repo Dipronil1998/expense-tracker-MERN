@@ -41,7 +41,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3001/api/v1/expenses",
+					"raw": "localhost:3001/api/v1/expenses?categoryFilter=[\"Stock\", \"Mutual fund\",\"Other\"]",
 					"host": [
 						"localhost"
 					],
@@ -61,6 +61,10 @@
 							"key": "to",
 							"value": "2023-09-13",
 							"disabled": true
+						},
+						{
+							"key": "categoryFilter",
+							"value": "[\"Stock\", \"Mutual fund\",\"Other\"]"
 						}
 					]
 				}

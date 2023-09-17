@@ -108,6 +108,18 @@ exports.viewExpenses = async (req, res, next) => {
             };
         }
 
+        if (req.query.categoryFilter) {
+            query = {
+                $and: [
+                    query, 
+                    {
+                        category: {
+                            $in: JSON.parse(req.query.categoryFilter)
+                        }
+                    }
+                ]
+            };
+        }
         const expenses = await Expense.find(query).sort({ date: -1 });
 
         const categoryValues = [];
@@ -144,6 +156,7 @@ exports.viewExpenses = async (req, res, next) => {
 
         res.status(200).json({ response: expenses, cardResponse: categoryValues });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 }
