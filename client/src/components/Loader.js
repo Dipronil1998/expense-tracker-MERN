@@ -17,7 +17,7 @@ const Loader = () => (
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      minHeight: "100vh" // Set the container height to fill the viewport
+      minHeight: "60vh" // Set the container height to fill the viewport
     }}
   >
     <Spin indicator={antIcon} />
