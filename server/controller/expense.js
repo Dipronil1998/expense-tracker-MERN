@@ -1,5 +1,5 @@
 const Expense = require("../model/expense")
-const {validCategories} = require("../interface/dbEnum")
+const { validCategories } = require("../interface/dbEnum")
 exports.addExpenses = async (req, res, next) => {
     try {
         const title = req.body.title;
@@ -51,7 +51,7 @@ exports.viewExpenses = async (req, res, next) => {
         if (req.query.categoryFilter) {
             query = {
                 $and: [
-                    query, 
+                    query,
                     {
                         category: {
                             $in: JSON.parse(req.query.categoryFilter)
@@ -101,33 +101,75 @@ exports.viewExpenses = async (req, res, next) => {
 }
 
 
-exports.deleteExpenses = async (req,res,next)=>{
+exports.deleteExpenses = async (req, res, next) => {
     try {
-       const _id = req.params.id;
-       const expenses = await Expense.findOne({_id:_id});
-       if(expenses){
-        await Expense.deleteOne({_id:_id});
-        return res.status(200).json({ message: "Expenses delete successfully." });
-       } else {
-        return res.status(404).json({ message: "Expenses not found" });
-       }
+        const _id = req.params.id;
+        const expenses = await Expense.findOne({ _id: _id });
+        if (expenses) {
+            await Expense.deleteOne({ _id: _id });
+            return res.status(200).json({ message: "Expenses delete successfully." });
+        } else {
+            return res.status(404).json({ message: "Expenses not found" });
+        }
     } catch (error) {
-        
+        next(error);
     }
 }
 
-exports.viewExpensesById = async (req,res,next)=>{
+exports.viewExpensesById = async (req, res, next) => {
     try {
-       const _id = req.params.id;
-       const expenses = await Expense.findOne({_id:_id});
-       if(expenses){
-        return res.status(200).json({ response: expenses });
-       } else {
-        return res.status(404).json({ message: "Expenses not found" });
-       }
+        const _id = req.params.id;
+        const expenses = await Expense.findOne({ _id: _id });
+        if (expenses) {
+            return res.status(200).json({ response: expenses });
+        } else {
+            return res.status(404).json({ message: "Expenses not found" });
+        }
     } catch (error) {
-        
+        next(error);
     }
 }
+
+exports.updateExpenses = async (req, res, next) => {
+    try {
+      const _id = req.params.id;
+  
+      const title = req.body.title;
+      const date = req.body.date ? new Date(req.body.date).setHours(0, 0, 0, 0) : new Date().setHours(0, 0, 0, 0);
+      const amount = req.body.amount;
+      const category = req.body.category;
+      const paymentMethod = req.body.paymentMethod;
+      const paymentBank = req.body.paymentBank;
+      const description = req.body.description;
+  
+      const expenses = await Expense.findOne({ _id: _id });
+  
+      if (!expenses) {
+        return res.status(404).json({ message: "Expenses not found." });
+      }
+  
+      const updateExpense = await Expense.updateOne(
+        { _id: _id },
+        {
+          title,
+          date,
+          amount,
+          category,
+          paymentMethod,
+          paymentBank,
+          description,
+        }
+      );
+  
+      if (updateExpense.nModified > 0) {
+        return res.status(200).json({ message: "Expenses updated successfully." });
+      } else {
+        return res.status(404).json({ message: "No changes made to expenses." });
+      }
+    } catch (error) {
+      next(error);
+    }
+  };
+  
 
 

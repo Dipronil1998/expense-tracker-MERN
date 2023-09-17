@@ -113,6 +113,36 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "update expenses",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"yyyyy\",\r\n    \"date\": \"\",\r\n    \"amount\": 10000,\r\n    \"category\": \"Mutual fund\",\r\n    \"paymentMethod\": \"Online\",\r\n    \"paymentBank\": \"HDFC\",\r\n    \"description\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3001/api/v1/expenses/6506776c5b1698881e37763c",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"v1",
+						"expenses",
+						"6506776c5b1698881e37763c"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
