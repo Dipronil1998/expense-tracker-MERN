@@ -30,6 +30,7 @@ exports.addExpenses = async (req, res, next) => {
 exports.viewExpenses = async (req, res, next) => {
     try {
         let query = {};
+        let totalExpensesThisMonth = 0;
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -87,7 +88,7 @@ exports.viewExpenses = async (req, res, next) => {
             const totalValidCategorieExpensesMonthwise = validCategorieExpensesMonthwise.length > 0
                 ? validCategorieExpensesMonthwise[0].totalAmount
                 : 0;
-
+            totalExpensesThisMonth = totalExpensesThisMonth + totalValidCategorieExpensesMonthwise;
             const response = {
                 title: `total ${validCategory} expenses this month`,
                 text: totalValidCategorieExpensesMonthwise
@@ -117,6 +118,12 @@ exports.viewExpenses = async (req, res, next) => {
             text: totalIncomes[0].totalAmount
         };
         categoryValues.push(incomeResponse);
+
+        const remainingResponse = {
+            title: `total Remaining this month`,
+            text: totalIncomes[0].totalAmount - totalExpensesThisMonth
+        };
+        categoryValues.push(remainingResponse);
 
         res.status(200).json({ response: expenses, cardResponse: categoryValues });
     } catch (error) {
