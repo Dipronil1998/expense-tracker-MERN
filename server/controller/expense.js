@@ -113,7 +113,7 @@ exports.viewExpenses = async (req, res, next) => {
         ]);
 
         const incomeResponse = {
-            title: `total Income expenses this month`,
+            title: `total Income this month`,
             text: totalIncomes[0].totalAmount
         };
         categoryValues.push(incomeResponse);
