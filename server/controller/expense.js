@@ -160,8 +160,7 @@ exports.updateExpenses = async (req, res, next) => {
           description,
         }
       );
-  
-      if (updateExpense.nModified > 0) {
+      if (updateExpense.modifiedCount > 0) {
         return res.status(200).json({ message: "Expenses updated successfully." });
       } else {
         return res.status(404).json({ message: "No changes made to expenses." });

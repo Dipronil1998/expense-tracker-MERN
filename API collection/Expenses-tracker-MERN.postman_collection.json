@@ -121,7 +121,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"yyyyy\",\r\n    \"date\": \"\",\r\n    \"amount\": 10000,\r\n    \"category\": \"Mutual fund\",\r\n    \"paymentMethod\": \"Online\",\r\n    \"paymentBank\": \"HDFC\",\r\n    \"description\": \"\"\r\n}",
+					"raw": "{\r\n    \"title\": \"dipro\",\r\n    \"date\": \"2023-09-17T18:30:00.000Z\",\r\n    \"amount\": 100,\r\n    \"category\": \"Other\",\r\n    \"paymentMethod\": \"Online\",\r\n    \"paymentBank\": \"ICICI\",\r\n    \"description\": \"ddff\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -129,7 +129,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3001/api/v1/expenses/6506776c5b1698881e37763c",
+					"raw": "localhost:3001/api/v1/expenses/6507d9f2e5aeebae803a9fdd",
 					"host": [
 						"localhost"
 					],
@@ -138,7 +138,7 @@
 						"api",
 						"v1",
 						"expenses",
-						"6506776c5b1698881e37763c"
+						"6507d9f2e5aeebae803a9fdd"
 					]
 				}
 			},

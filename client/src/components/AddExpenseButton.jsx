@@ -46,9 +46,7 @@ const AddExpenseButton = () => {
     toggleModal();
   };
 
-  const closeModal = () => {
-    toggleModal();
-  };
+  
 
   const handleDateChange = (dates) => {
     setTempSelectedDates(dates);
@@ -111,7 +109,7 @@ const AddExpenseButton = () => {
         </Button>
       </div>
       {/* Render the ExpenseModal component */}
-      <ExpenseModal show={showModal} handleClose={closeModal} />
+      <ExpenseModal show={showModal}/>
     </div>
   );
 };

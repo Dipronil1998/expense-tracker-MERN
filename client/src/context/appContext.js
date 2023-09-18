@@ -112,13 +112,13 @@ const AppProvider = ({ children }) => {
     const updateExpenses = async (values) => {
         // dispatch({ type: CREATE_EXPENSES_BEGIN });
         try {
-            const { _id, ...newValues } = values;
+            const { _id,createdAt,updatedAt,__v, ...newValues } = values;
             const url = `${baseUrl}/expenses/${_id}`;
             await axios.put(url, newValues);
             dispatch({
                 type: UPDATE_EXPENSES_SUCCESS,
             });
-            // getAllExpenses(selectedDates,selectedCategoryFilter);
+            getAllExpenses(selectedDates,selectedCategoryFilter);
         } catch (error) {
             console.log(error);
         }
