@@ -143,6 +143,35 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Add income",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"HDFC Ltd\",\r\n    \"date\": \"\",\r\n    \"amount\": 1529,\r\n    \"category\": \"Interest\",\r\n    \"paymentMethod\": \"Online\",\r\n    \"paymentDepositsBank\": \"INDIAN\",\r\n    \"description\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3001/api/v1/income",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"v1",
+						"income"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

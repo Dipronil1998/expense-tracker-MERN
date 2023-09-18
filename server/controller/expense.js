@@ -1,4 +1,5 @@
 const Expense = require("../model/expense")
+const Income = require("../model/income")
 const { validCategories } = require("../interface/dbEnum")
 exports.addExpenses = async (req, res, next) => {
     try {
@@ -93,6 +94,29 @@ exports.viewExpenses = async (req, res, next) => {
             };
             categoryValues.push(response);
         }
+
+        const totalIncomes = await Income.aggregate([
+            {
+                $match: {
+                    date: {
+                        $gte: firstDayOfMonth,
+                        $lte: today
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalAmount: { $sum: "$amount" }
+                }
+            }
+        ]);
+
+        const incomeResponse = {
+            title: `total Income expenses this month`,
+            text: totalIncomes[0].totalAmount
+        };
+        categoryValues.push(incomeResponse);
 
         res.status(200).json({ response: expenses, cardResponse: categoryValues });
     } catch (error) {
