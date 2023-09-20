@@ -62,8 +62,11 @@ exports.viewExpenses = async (req, res, next) => {
                 ]
             };
         }
-        const expenses = await Expense.find(query).sort({ date: -1 });
+        const expenses = await Expense.find(query).sort({ date: -1 }).lean();
+        const incomes = await Income.find(query).sort({ date: -1 }).lean();
 
+        const responses = expenses.map((item) => ({ ...item, type: 'expenses' })).concat(incomes.map((item) => ({ ...item, type: 'incomes' })));
+        
         const categoryValues = [];
 
         for (const validCategory of validCategories) {
@@ -125,7 +128,7 @@ exports.viewExpenses = async (req, res, next) => {
         };
         categoryValues.push(remainingResponse);
 
-        res.status(200).json({ response: expenses, cardResponse: categoryValues });
+        res.status(200).json({ response: responses, cardResponse: categoryValues });
     } catch (error) {
         next(error);
     }
