@@ -1,5 +1,4 @@
 const Expense = require("../model/expense")
-const Income = require("../model/income")
 const { validCategories } = require("../interface/dbEnum")
 exports.addExpenses = async (req, res, next) => {
     try {
@@ -65,12 +64,8 @@ exports.viewExpenses = async (req, res, next) => {
                 ]
             };
         }
-        console.log({...query,type:'Debits'});
         const expenses = await Expense.find(query).sort({ date: -1 }).lean();
-        // const incomes = await Income.find(query).sort({ date: -1 }).lean();
-
-        // const responses = expenses.map((item) => ({ ...item, types: 'expenses' })).concat(incomes.map((item) => ({ ...item, types: 'incomes' })));
-        
+       
         const categoryValues = [];
 
         for (const validCategory of validCategories) {
