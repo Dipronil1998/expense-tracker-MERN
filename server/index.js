@@ -12,11 +12,9 @@ app.use(cors());
 const {pageNotFound} = require('./utils/PageNotFound');
 const {errorHandler} = require('./utils/ErrorHandler');
 const expensesRoute=require('./route/expense');
-const incomeRoute=require('./route/income');
 const port = process.env.port;
 
 app.use('/api/v1/expenses', expensesRoute);
-app.use('/api/v1/income', incomeRoute);
 app.use(pageNotFound);
 app.use(errorHandler);
 

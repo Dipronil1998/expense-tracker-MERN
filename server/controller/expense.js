@@ -81,7 +81,11 @@ exports.viewExpenses = async (req, res, next) => {
                         date: {
                             $gte: firstDayOfMonth,
                             $lte: today
-                        }
+                        },
+                        $or:[
+                            {type: "Debits"}, {type: undefined}
+                        ]
+                        
                     }
                 },
                 {
@@ -127,11 +131,11 @@ exports.viewExpenses = async (req, res, next) => {
         };
         categoryValues.push(incomeResponse);
 
-        // const remainingResponse = {
-        //     title: `total Remaining this month`,
-        //     text: totalIncomes[0].totalAmount - totalExpensesThisMonth
-        // };
-        // categoryValues.push(remainingResponse);
+        const remainingResponse = {
+            title: `total Remaining this month`,
+            text: totalIncomes[0].totalAmount - totalExpensesThisMonth
+        };
+        categoryValues.push(remainingResponse);
 
         res.status(200).json({ response: expenses, cardResponse: categoryValues });
     } catch (error) {
