@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 const {validCategories,
     validPaymentMethod,
-    validPaymentBank} = require('../interface/dbEnum');
+    validPaymentBank,
+    validType,
+    validIncomeCategories
+} = require('../interface/dbEnum');
 
 const expensesSchema = new mongoose.Schema({
     title: {
@@ -18,7 +21,7 @@ const expensesSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: validCategories
+        enum: validCategories.concat(validIncomeCategories)
     },
     paymentMethod: {
         type: String,
@@ -28,6 +31,10 @@ const expensesSchema = new mongoose.Schema({
     paymentBank: {
         type: String,
         enum: validPaymentBank
+    },
+    type: {
+        type: String,
+        enum: validType
     },
     description: {
         type: String,

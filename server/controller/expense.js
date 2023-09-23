@@ -9,6 +9,8 @@ exports.addExpenses = async (req, res, next) => {
         const category = req.body.category;
         const paymentMethod = req.body.paymentMethod;
         const paymentBank = req.body.paymentBank;
+        // When money is deducted from your account, it is typically referred to as a "debit."
+        const type = req.body.type || 'Debits';
         const description = req.body.description;
 
         const newExpense = new Expense({
@@ -18,6 +20,7 @@ exports.addExpenses = async (req, res, next) => {
             category,
             paymentMethod,
             paymentBank,
+            type,
             description,
         });
         await newExpense.save();
@@ -62,10 +65,11 @@ exports.viewExpenses = async (req, res, next) => {
                 ]
             };
         }
+        console.log({...query,type:'Debits'});
         const expenses = await Expense.find(query).sort({ date: -1 }).lean();
-        const incomes = await Income.find(query).sort({ date: -1 }).lean();
+        // const incomes = await Income.find(query).sort({ date: -1 }).lean();
 
-        const responses = expenses.map((item) => ({ ...item, type: 'expenses' })).concat(incomes.map((item) => ({ ...item, type: 'incomes' })));
+        // const responses = expenses.map((item) => ({ ...item, types: 'expenses' })).concat(incomes.map((item) => ({ ...item, types: 'incomes' })));
         
         const categoryValues = [];
 
@@ -99,13 +103,14 @@ exports.viewExpenses = async (req, res, next) => {
             categoryValues.push(response);
         }
 
-        const totalIncomes = await Income.aggregate([
+        const totalIncomes = await Expense.aggregate([
             {
                 $match: {
                     date: {
                         $gte: firstDayOfMonth,
                         $lte: today
-                    }
+                    },
+                    type:'Credits'
                 }
             },
             {
@@ -122,13 +127,13 @@ exports.viewExpenses = async (req, res, next) => {
         };
         categoryValues.push(incomeResponse);
 
-        const remainingResponse = {
-            title: `total Remaining this month`,
-            text: totalIncomes[0].totalAmount - totalExpensesThisMonth
-        };
-        categoryValues.push(remainingResponse);
+        // const remainingResponse = {
+        //     title: `total Remaining this month`,
+        //     text: totalIncomes[0].totalAmount - totalExpensesThisMonth
+        // };
+        // categoryValues.push(remainingResponse);
 
-        res.status(200).json({ response: responses, cardResponse: categoryValues });
+        res.status(200).json({ response: expenses, cardResponse: categoryValues });
     } catch (error) {
         next(error);
     }
@@ -174,6 +179,7 @@ exports.updateExpenses = async (req, res, next) => {
       const category = req.body.category;
       const paymentMethod = req.body.paymentMethod;
       const paymentBank = req.body.paymentBank;
+      const type = req.body.type || 'Debits';
       const description = req.body.description;
   
       const expenses = await Expense.findOne({ _id: _id });
@@ -191,6 +197,7 @@ exports.updateExpenses = async (req, res, next) => {
           category,
           paymentMethod,
           paymentBank,
+          type,
           description,
         }
       );

@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 
 const initialState = {
   title: "",
+  type: "",
   date: "",
   amount: "",
   category: "",
@@ -19,13 +20,15 @@ const initialState = {
 const ExpenseModal = ({ show }) => {
   const navigate = useNavigate();
   const currentDate = format(new Date(), 'yyyy-MM-dd');
-  const [values, setValues] = useState(initialState)
+  const [values, setValues] = useState(initialState);
+  const [selectedValue, setSelectedValue] = useState('');
   const [errors, setErrors] = useState({});
   const {
     isEditing,
     toggleModal,
     validCategories,
     validPaymentMethod,
+    validType,
     validPaymentBank,
     createExpenses,
     isExpensesCreate,
@@ -47,6 +50,13 @@ const ExpenseModal = ({ show }) => {
   const handleInput = (e) => {
     setErrors((prevErrors) => ({ ...prevErrors, [e.target.name]: '' }));
     setValues({ ...values, [e.target.name]: e.target.value })
+  };
+
+  const handleChange = (event) => {
+    const newValue = event.target.value;
+    setSelectedValue(newValue);
+    console.log('Selected Value:', newValue);
+    if(newValue === '')
   };
 
   const validateForm = () => {
@@ -86,8 +96,8 @@ const ExpenseModal = ({ show }) => {
     }
   }
 
-  useEffect(()=>{
-    if(isExpensesCreate){
+  useEffect(() => {
+    if (isExpensesCreate) {
       navigate('/')
     }
   }, [isExpensesCreate])
@@ -99,18 +109,45 @@ const ExpenseModal = ({ show }) => {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group controlId="title">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type="text"
-              name="title"
-              // value={expenses?.title}
-              value={values.title}
-              onChange={handleInput}
-              required
-            />
-            <Form.Text className="text-danger">{errors.title}</Form.Text>
-          </Form.Group>
+          <div className="row">
+            <div className="col-8">
+              <Form.Group controlId="title">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  value={values.title}
+                  onChange={handleInput}
+                  required
+                />
+                <Form.Text className="text-danger">{errors.title}</Form.Text>
+              </Form.Group>
+            </div>
+            <div className="col-4">
+              <Form.Group controlId="type">
+                <Form.Label>Type</Form.Label>
+                <Form.Control
+                  as="select"
+                  name="type"
+                  value={values?.type === undefined ? 'Debits' : values?.type}
+                  onChange={handleInput}
+                  onClick={handleChange}
+                  required
+                >
+                  <option value="">Select Type</option>
+                  {validType &&
+                    validType.map((itemValue, index) => {
+                      return (
+                        <option key={index} value={itemValue}>
+                          {itemValue}
+                        </option>
+                      );
+                    })}
+                </Form.Control>
+              </Form.Group>
+
+            </div>
+          </div>
 
           <div className="row">
             <div className="col">
@@ -124,7 +161,7 @@ const ExpenseModal = ({ show }) => {
                   title="Please use the yyyy-MM-dd format"
                   value={values.date ? format(new Date(values.date), 'yyyy-MM-dd') : ''}
                   onChange={handleInput}
-                  max={currentDate} 
+                  max={currentDate}
                 />
                 <Form.Text className="text-danger">{errors.date}</Form.Text>
               </Form.Group>
@@ -224,7 +261,7 @@ const ExpenseModal = ({ show }) => {
           </Form.Group>
           <div className="buttons-container">
             <Button variant="primary" type="submit" className="save-button" onClick={handleSubmit}>
-            {isEditing ? 'Update' : 'Save'} Expenses
+              {isEditing ? 'Update' : 'Save'} Expenses
             </Button>
             <Button variant="secondary" onClick={closeModal} className="close-button">
               Close
