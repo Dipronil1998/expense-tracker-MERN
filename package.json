@@ -2,7 +2,7 @@
   "scripts": {
     "server": "npm start --prefix server",
     "client": "npm start --prefix client",
-    "start": "concurrently --kill-others-on-fail \" npm run server\" \" npm run client\""
+    "start": "npm install --prefix server && npm install --prefix client && concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "concurrently": "^8.2.1"
