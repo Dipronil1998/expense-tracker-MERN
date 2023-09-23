@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"Axis small cap\",\r\n    \"date\": \"\",\r\n    \"amount\": 10000,\r\n    \"category\": \"Mutual fund\",\r\n    \"paymentMethod\": \"Online\",\r\n    \"paymentBank\": \"HDFC\",\r\n    \"description\": \"\"\r\n}",
+					"raw": "{\r\n    \"title\": \"testing\",\r\n    \"date\": \"\",\r\n    \"amount\": 1000,\r\n    \"category\": \"Mutual fund\",\r\n    \"paymentMethod\": \"Online\",\r\n    \"paymentBank\": \"HDFC\",\r\n    \"type\":\"Debits\",\r\n    \"description\": \"\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -121,7 +121,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"dipro\",\r\n    \"date\": \"2023-09-17T18:30:00.000Z\",\r\n    \"amount\": 100,\r\n    \"category\": \"Other\",\r\n    \"paymentMethod\": \"Online\",\r\n    \"paymentBank\": \"ICICI\",\r\n    \"description\": \"ddff\"\r\n}",
+					"raw": "{\r\n    \"title\": \"testing\",\r\n    \"date\": \"\",\r\n    \"amount\": 1000,\r\n    \"category\": \"Mutual fund\",\r\n    \"paymentMethod\": \"Online\",\r\n    \"paymentBank\": \"HDFC\",\r\n    \"type\":\"Debits\",\r\n    \"description\": \"\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -129,7 +129,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3001/api/v1/expenses/6507d9f2e5aeebae803a9fdd",
+					"raw": "localhost:3001/api/v1/expenses/650e8057cc4cf1161a805f56",
 					"host": [
 						"localhost"
 					],
@@ -138,36 +138,7 @@
 						"api",
 						"v1",
 						"expenses",
-						"6507d9f2e5aeebae803a9fdd"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Add income",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"HDFC Ltd\",\r\n    \"date\": \"\",\r\n    \"amount\": 1529,\r\n    \"category\": \"Interest\",\r\n    \"paymentMethod\": \"Online\",\r\n    \"paymentDepositsBank\": \"INDIAN\",\r\n    \"description\": \"\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:3001/api/v1/income",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"api",
-						"v1",
-						"income"
+						"650e8057cc4cf1161a805f56"
 					]
 				}
 			},

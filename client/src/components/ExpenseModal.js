@@ -83,6 +83,7 @@ const ExpenseModal = ({ show }) => {
         message.success('Expenses updated successfully.');
       } else {
         createExpenses(values);
+        setValues(initialState)
         message.success('Expenses created successfully.');
       }
     }
