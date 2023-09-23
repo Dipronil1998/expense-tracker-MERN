@@ -5,6 +5,7 @@ import { Button, message, Popconfirm } from 'antd';
 import { useAppContext } from '../context/appContext';
 
 const Expense = ({ expenseData }) => {
+  console.log(expenseData?.type,"expenseData");
   const { deleteExpenses, setEditExpenses } = useAppContext();
   const confirm = (e) => {
     deleteExpenses(expenseData._id);
@@ -16,7 +17,7 @@ const Expense = ({ expenseData }) => {
   return (
     <div className="parent-container">
       <div className="expense-card" style={{
-        backgroundColor: expenseData.type === 'incomes' ? '#B9FF94' : '#FFCECE'
+        backgroundColor: (expenseData?.type === undefined || (expenseData.type === 'Debits')) ? '#FFCECE' : '#B9FF94'
       }}>
         <div className="expense-header">
           <h3>{expenseData.title}</h3>

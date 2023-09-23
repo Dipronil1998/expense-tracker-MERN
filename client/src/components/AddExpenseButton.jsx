@@ -33,12 +33,15 @@ const AddExpenseButton = () => {
     setSelectedCategoryFilter,
     tempSelectedCategoryFilter,
     setTempSelectedCategoryFilter,
+    validIncomeCategories
   } = useAppContext();
 
-  validCategories.map((validCategory) => {
+  const categories = validCategories.concat(validIncomeCategories);
+  
+  categories.map((category) => {
     options.push({
-      label: validCategory,
-      value: validCategory,
+      label: category,
+      value: category,
     });
   });
 

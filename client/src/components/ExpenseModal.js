@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 
 const initialState = {
   title: "",
+  type: "Debits", 
   date: "",
   amount: "",
   category: "",
@@ -18,14 +19,15 @@ const initialState = {
 
 const ExpenseModal = ({ show }) => {
   const navigate = useNavigate();
-  const currentDate = format(new Date(), 'yyyy-MM-dd');
-  const [values, setValues] = useState(initialState)
+  const [values, setValues] = useState(initialState);
   const [errors, setErrors] = useState({});
   const {
     isEditing,
     toggleModal,
     validCategories,
+    validIncomeCategories,
     validPaymentMethod,
+    validType,
     validPaymentBank,
     createExpenses,
     isExpensesCreate,
@@ -40,7 +42,7 @@ const ExpenseModal = ({ show }) => {
 
   useEffect(() => {
     if (isEditing && expenses) {
-      setValues(expenses); // Set values state with edited expense data
+      setValues(expenses);
     }
   }, [isEditing, expenses]);
 
@@ -79,18 +81,12 @@ const ExpenseModal = ({ show }) => {
       if (isEditing) {
         updateExpenses(values);
         message.success('Expenses updated successfully.');
-        return
+      } else {
+        createExpenses(values);
+        message.success('Expenses created successfully.');
       }
-      createExpenses(values);
-      message.success('Expenses created successfully.');
     }
   }
-
-  useEffect(()=>{
-    if(isExpensesCreate){
-      navigate('/')
-    }
-  }, [isExpensesCreate])
 
   return (
     <Modal show={show} onHide={closeModal}>
@@ -99,18 +95,36 @@ const ExpenseModal = ({ show }) => {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group controlId="title">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type="text"
-              name="title"
-              // value={expenses?.title}
-              value={values.title}
-              onChange={handleInput}
-              required
-            />
-            <Form.Text className="text-danger">{errors.title}</Form.Text>
-          </Form.Group>
+          <div className="row">
+            <div className="col-8">
+              <Form.Group controlId="title">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  value={values.title}
+                  onChange={handleInput}
+                  required
+                />
+                <Form.Text className="text-danger">{errors.title}</Form.Text>
+              </Form.Group>
+            </div>
+            <div className="col-4">
+              <Form.Group controlId="type">
+                <Form.Label>Type</Form.Label>
+                <Form.Control
+                  as="select"
+                  name="type"
+                  value={values.type}
+                  onChange={handleInput}
+                  required
+                >
+                  <option value="Debits">Debits</option>
+                  <option value="Credits">Credits</option>
+                </Form.Control>
+              </Form.Group>
+            </div>
+          </div>
 
           <div className="row">
             <div className="col">
@@ -124,7 +138,7 @@ const ExpenseModal = ({ show }) => {
                   title="Please use the yyyy-MM-dd format"
                   value={values.date ? format(new Date(values.date), 'yyyy-MM-dd') : ''}
                   onChange={handleInput}
-                  max={currentDate} 
+                  max={format(new Date(), 'yyyy-MM-dd')}
                 />
                 <Form.Text className="text-danger">{errors.date}</Form.Text>
               </Form.Group>
@@ -135,7 +149,7 @@ const ExpenseModal = ({ show }) => {
                 <Form.Control
                   type="number"
                   name="amount"
-                  value={values?.amount}
+                  value={values.amount}
                   onChange={handleInput}
                   required
                 />
@@ -151,18 +165,22 @@ const ExpenseModal = ({ show }) => {
                 <Form.Control
                   as="select"
                   name="category"
-                  value={values?.category}
+                  value={values.category}
                   onChange={handleInput}
                   required
                 >
                   <option value="">Select Category</option>
-                  {
-                    validCategories && validCategories.map((itemValue, index) => {
-                      return (
-                        <option key={index} value={itemValue}>{itemValue}</option>
-                      )
-                    })
-                  }
+                  {values.type === 'Debits'
+                    ? validCategories.map((itemValue, index) => (
+                        <option key={index} value={itemValue}>
+                          {itemValue}
+                        </option>
+                      ))
+                    : validIncomeCategories.map((itemValue, index) => (
+                        <option key={index} value={itemValue}>
+                          {itemValue}
+                        </option>
+                      ))}
                 </Form.Control>
                 <Form.Text className="text-danger">{errors.category}</Form.Text>
               </Form.Group>
@@ -173,18 +191,16 @@ const ExpenseModal = ({ show }) => {
                 <Form.Control
                   as="select"
                   name="paymentMethod"
-                  value={values?.paymentMethod}
+                  value={values.paymentMethod}
                   onChange={handleInput}
                   required
                 >
                   <option value="">Select Payment Method</option>
-                  {
-                    validPaymentMethod && validPaymentMethod.map((itemValue, index) => {
-                      return (
-                        <option key={index} value={itemValue}>{itemValue}</option>
-                      )
-                    })
-                  }
+                  {validPaymentMethod.map((itemValue, index) => (
+                    <option key={index} value={itemValue}>
+                      {itemValue}
+                    </option>
+                  ))}
                 </Form.Control>
                 <Form.Text className="text-danger">{errors.paymentMethod}</Form.Text>
               </Form.Group>
@@ -195,17 +211,15 @@ const ExpenseModal = ({ show }) => {
                 <Form.Control
                   as="select"
                   name="paymentBank"
-                  value={values?.paymentBank}
+                  value={values.paymentBank}
                   onChange={handleInput}
                 >
                   <option value="">Select Bank</option>
-                  {
-                    validPaymentBank && validPaymentBank.map((itemValue, index) => {
-                      return (
-                        <option key={index} value={itemValue}>{itemValue}</option>
-                      )
-                    })
-                  }
+                  {validPaymentBank.map((itemValue, index) => (
+                    <option key={index} value={itemValue}>
+                      {itemValue}
+                    </option>
+                  ))}
                 </Form.Control>
                 <Form.Text className="text-danger">{errors.paymentBank}</Form.Text>
               </Form.Group>
@@ -218,13 +232,13 @@ const ExpenseModal = ({ show }) => {
             <Form.Control
               as="textarea"
               name="description"
-              value={values?.description}
+              value={values.description}
               onChange={handleInput}
             />
           </Form.Group>
           <div className="buttons-container">
             <Button variant="primary" type="submit" className="save-button" onClick={handleSubmit}>
-            {isEditing ? 'Update' : 'Save'} Expenses
+              {isEditing ? 'Update' : 'Save'} Expenses
             </Button>
             <Button variant="secondary" onClick={closeModal} className="close-button">
               Close

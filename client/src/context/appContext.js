@@ -21,6 +21,8 @@ const initialState = {
     validCategories: ["Stock", "Mutual fund", "Self", "Other"],
     validPaymentMethod: ["Cash", "Online"],
     validPaymentBank: ["SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"],
+    validType: ["Credits", "Debits"],
+    validIncomeCategories: ["Profit", "Dividend", "Interest", "Salary", "Freelancing", "Stock", "Mutual fund", "Other"],
     alertType: "",
     alertText: "",
     isExpensesCreate: false,
