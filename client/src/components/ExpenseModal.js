@@ -212,6 +212,7 @@ const ExpenseModal = ({ show }) => {
                 <Form.Control
                   as="select"
                   name="paymentBank"
+                  disabled={values.paymentMethod === 'Cash' ?? true}
                   value={values.paymentBank}
                   onChange={handleInput}
                 >
