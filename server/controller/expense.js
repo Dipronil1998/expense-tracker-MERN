@@ -92,7 +92,7 @@ exports.viewExpenses = async (req, res, next) => {
             ]);
 
             const totalValidCategorieExpensesMonthwise = validCategorieExpensesMonthwise.length > 0
-                ? validCategorieExpensesMonthwise[0].totalAmount
+                ? validCategorieExpensesMonthwise[0]?.totalAmount
                 : 0;
             totalExpensesThisMonth = totalExpensesThisMonth + totalValidCategorieExpensesMonthwise;
             const response = {
@@ -122,18 +122,19 @@ exports.viewExpenses = async (req, res, next) => {
 
         const incomeResponse = {
             title: `total Income this month`,
-            text: totalIncomes[0].totalAmount
+            text: totalIncomes[0]?.totalAmount || 0
         };
         categoryValues.push(incomeResponse);
-
+        
         const remainingResponse = {
             title: `total Remaining this month`,
-            text: totalIncomes[0].totalAmount - totalExpensesThisMonth
+            text: (totalIncomes[0] === undefined) ? 0 : totalIncomes[0].totalAmount - totalExpensesThisMonth
         };
         categoryValues.push(remainingResponse);
 
         res.status(200).json({ response: expenses, cardResponse: categoryValues });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 }
