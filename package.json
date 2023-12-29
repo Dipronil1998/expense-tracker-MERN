@@ -1,8 +1,9 @@
 {
   "scripts": {
+    "start":"cd server && nodemon index.js",
     "server": "npm start --prefix server",
     "client": "npm start --prefix client",
-    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "concurrently": "^8.2.1"
