@@ -38,6 +38,7 @@ const AppProvider = ({ children }) => {
     const [selectedCategoryFilter, setSelectedCategoryFilter] = useState([]);
     const [tempSelectedCategoryFilter, setTempSelectedCategoryFilter] = useState([]);
 
+    // let baseUrl= "https://dipronil-expense-app.onrender.com/api/v1";
     let baseUrl;
     const { hostname } = window.location;
     if (hostname === 'localhost' || hostname === '127.0.0.1') {

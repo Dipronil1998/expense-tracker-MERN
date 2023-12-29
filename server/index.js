@@ -8,7 +8,7 @@ db.dbConnect();
 const app = express();
 app.use(bodyParser.json());
 
-const whitelist = ['http://localhost:3000', 'https://dipronil-expense-app.onrender.com'];
+const whitelist = ['http://localhost:3000', 'https://dipronil-expenses.netlify.app'];
 const corsOptions = {
   origin(origin, callback) {
     if (!origin || whitelist.indexOf(origin) !== -1) {
