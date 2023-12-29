@@ -7,7 +7,20 @@ db.dbConnect();
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+
+const whitelist = ['http://localhost:3000', 'https://dipronil-expense-app.onrender.com'];
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 
 const {pageNotFound} = require('./utils/PageNotFound');
 const {errorHandler} = require('./utils/ErrorHandler');
@@ -15,7 +28,6 @@ const expensesRoute=require('./route/expense');
 const port = process.env.port;
 
 app.get('/', (req,res)=>{
-    console.log("Dipronil");
     res.status(200).json({"message":"index"})
 })
 app.use('/api/v1/expenses', expensesRoute);

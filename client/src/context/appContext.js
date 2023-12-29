@@ -13,11 +13,11 @@ import {
 } from './Action'
 
 const initialState = {
-    isLoading:false,
+    isLoading: false,
     isEditing: false,
     expensesData: [],
     cardData: [],
-    expenses:"",
+    expenses: "",
     validCategories: ["Stock", "Mutual fund", "Self", "Other"],
     validPaymentMethod: ["Cash", "Online"],
     validPaymentBank: ["SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"],
@@ -37,12 +37,19 @@ const AppProvider = ({ children }) => {
     const [tempSelectedDates, setTempSelectedDates] = useState([]);
     const [selectedCategoryFilter, setSelectedCategoryFilter] = useState([]);
     const [tempSelectedCategoryFilter, setTempSelectedCategoryFilter] = useState([]);
-    const baseUrl = "http://localhost:3001/api/v1"
+
+    let baseUrl;
+    const { hostname } = window.location;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        baseUrl = "http://localhost:3001/api/v1";
+    } else {
+        baseUrl = "https://dipronil-expense-app.onrender.com/api/v1";
+    }
 
     const getAllExpenses = async (selectedDates, selectedCategoryFilter) => {
         dispatch({ type: GET_EXPENSES_BEGIN });
         try {
-            let url=`${baseUrl}/expenses?`;
+            let url = `${baseUrl}/expenses?`;
             if (selectedDates.length > 0) {
                 url = url + `from=${selectedDates[0].format("YYYY-MM-DD")}&to=${selectedDates[1].format("YYYY-MM-DD")}`
             }
@@ -74,7 +81,7 @@ const AppProvider = ({ children }) => {
                     expensesData: expensesResponse.data.message,
                 },
             });
-            getAllExpenses(selectedDates,selectedCategoryFilter);
+            getAllExpenses(selectedDates, selectedCategoryFilter);
         } catch (error) {
             console.log(error);
         }
@@ -85,7 +92,7 @@ const AppProvider = ({ children }) => {
         try {
             let url = `${baseUrl}/expenses/${id}`;
             await axios.delete(url);
-            getAllExpenses(selectedDates,selectedCategoryFilter);
+            getAllExpenses(selectedDates, selectedCategoryFilter);
         } catch (error) {
             console.log(error);
         }
@@ -100,10 +107,10 @@ const AppProvider = ({ children }) => {
         try {
             let url = `${baseUrl}/expenses/${id}`;
             const response = await axios.get(url);
-            dispatch({ 
+            dispatch({
                 type: SET_EDIT_EXPENSES,
-                payload:{
-                    expenses:response.data.response
+                payload: {
+                    expenses: response.data.response
                 }
             })
         } catch (error) {
@@ -114,21 +121,21 @@ const AppProvider = ({ children }) => {
     const updateExpenses = async (values) => {
         // dispatch({ type: CREATE_EXPENSES_BEGIN });
         try {
-            const { _id,createdAt,updatedAt,__v, ...newValues } = values;
+            const { _id, createdAt, updatedAt, __v, ...newValues } = values;
             const url = `${baseUrl}/expenses/${_id}`;
             await axios.put(url, newValues);
             dispatch({
                 type: UPDATE_EXPENSES_SUCCESS,
             });
-            getAllExpenses(selectedDates,selectedCategoryFilter);
+            getAllExpenses(selectedDates, selectedCategoryFilter);
         } catch (error) {
             console.log(error);
         }
     }
 
     useEffect(() => {
-        getAllExpenses(selectedDates,selectedCategoryFilter)
-    }, [selectedDates,selectedCategoryFilter])
+        getAllExpenses(selectedDates, selectedCategoryFilter)
+    }, [selectedDates, selectedCategoryFilter])
 
     return (
         <AppContext.Provider
