@@ -14,6 +14,9 @@ const {errorHandler} = require('./utils/ErrorHandler');
 const expensesRoute=require('./route/expense');
 const port = process.env.port;
 
+app.get('/', (req,res)=>{
+    res.status(200).json({"message":"index"})
+})
 app.use('/api/v1/expenses', expensesRoute);
 app.use(pageNotFound);
 app.use(errorHandler);
