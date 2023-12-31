@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Card, Table, Modal } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import './App.css';
 import { AddExpenseButton,ExpenseCards,ExpenseList } from "./components"
 
@@ -10,11 +10,6 @@ const cardStyle = {
 };
 
 function App() {
-
-  
-
-  
-
   return (
     <>
       <Container style={cardStyle}>

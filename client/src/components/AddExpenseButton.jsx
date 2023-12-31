@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from 'react-bootstrap';
 import ExpenseModal from './ExpenseModal';
 import { useAppContext } from '../context/appContext';
@@ -7,7 +7,7 @@ import { DatePicker, Space, Select } from 'antd';
 const { RangePicker } = DatePicker;
 
 const buttonStyle = {
-  justifyContent: 'flex-end',
+  // justifyContent: 'flex-end',
   alignItems: 'flex-end',
   display: 'flex',
   flexDirection: 'row',
@@ -22,14 +22,12 @@ const buttonGap = {
 const AddExpenseButton = () => {
   const options = [];
   const {
-    selectedDates,
     setSelectedDates,
     tempSelectedDates,
     setTempSelectedDates,
     showModal,
     toggleModal,
     validCategories,
-    selectedCategoryFilter,
     setSelectedCategoryFilter,
     tempSelectedCategoryFilter,
     setTempSelectedCategoryFilter,

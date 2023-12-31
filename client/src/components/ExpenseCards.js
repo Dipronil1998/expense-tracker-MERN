@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Row, Col, Card, Table, Modal } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import { useAppContext } from '../context/appContext';
 
 const cardTitle = {

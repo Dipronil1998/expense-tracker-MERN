@@ -18,7 +18,6 @@ const initialState = {
 }
 
 const ExpenseModal = ({ show }) => {
-  const navigate = useNavigate();
   const [values, setValues] = useState(initialState);
   const [errors, setErrors] = useState({});
   const {
@@ -27,10 +26,8 @@ const ExpenseModal = ({ show }) => {
     validCategories,
     validIncomeCategories,
     validPaymentMethod,
-    validType,
     validPaymentBank,
     createExpenses,
-    isExpensesCreate,
     expenses,
     updateExpenses,
   } = useAppContext();
