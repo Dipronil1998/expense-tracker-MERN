@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import "../assets/css/ExpenseModal.css"
 import { useAppContext } from '../context/appContext';
-import { useNavigate } from "react-router-dom";
 import { message } from 'antd';
 import { format } from 'date-fns';
 
