@@ -72,10 +72,16 @@ const AddExpenseButton = () => {
     document.querySelector('.ant-select-selector').click(); 
   };
 
-  const download = (e)=>{
-    console.log(e.href,"Dip");
-    downloadExpenses();
-  }
+  const handleDownloadClick = () => {
+    let baseUrl;
+    const { hostname } = window.location;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        baseUrl = "http://localhost:3001/api/v1";
+    } else {
+        baseUrl = "https://dipronil-expense-app.onrender.com/api/v1";
+    }
+    window.location.href = `${baseUrl}/expenses/download/report`;
+  };
 
 
   return (
@@ -111,7 +117,7 @@ const AddExpenseButton = () => {
           </Button>
         </div>
         <div style={buttonGap}>
-          <Button onClick={download} variant="success">
+          <Button onClick={handleDownloadClick} variant="success">
             Download
           </Button>
         </div>
