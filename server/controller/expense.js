@@ -239,6 +239,19 @@ exports.downloadExpenses = async (req, res, next) => {
             $lte: today
         };
 
+        if (req.query.categoryFilter) {
+            query = {
+                $and: [
+                    query,
+                    {
+                        category: {
+                            $in: JSON.parse(req.query.categoryFilter)
+                        }
+                    }
+                ]
+            };
+        }
+
         const expenses = await Expense.find(query).sort({date: -1});
 
         worksheet.addRows(expenses);

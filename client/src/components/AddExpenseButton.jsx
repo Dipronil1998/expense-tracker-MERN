@@ -73,6 +73,7 @@ const AddExpenseButton = () => {
   };
 
   const handleDownloadClick = () => {
+    console.log(tempSelectedCategoryFilter, "Dipronil");
     let baseUrl;
     const { hostname } = window.location;
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
@@ -80,7 +81,12 @@ const AddExpenseButton = () => {
     } else {
         baseUrl = "https://dipronil-expense-app.onrender.com/api/v1";
     }
-    window.location.href = `${baseUrl}/expenses/download/report`;
+    let url = `${baseUrl}/expenses/download/report?`
+    if(tempSelectedCategoryFilter.length > 0){
+      const categoryFilterString = JSON.stringify(tempSelectedCategoryFilter);
+      url =url + `categoryFilter=${categoryFilterString}`
+    }
+    window.location.href = url;
   };
 
 
