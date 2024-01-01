@@ -234,10 +234,17 @@ exports.downloadExpenses = async (req, res, next) => {
         today.setHours(0, 0, 0, 0);
         const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
-        query.date = {
-            $gte: firstDayOfMonth,
-            $lte: today
-        };
+        if (req.query.from && req.query.to) {
+            query.date = {
+                $gte: new Date(req.query.from).setHours(0, 0, 0, 0),
+                $lte: new Date(req.query.to).setHours(0, 0, 0, 0)
+            };
+        } else {
+            query.date = {
+                $gte: firstDayOfMonth,
+                $lte: today
+            };
+        }
 
         if (req.query.categoryFilter) {
             query = {
