@@ -242,7 +242,6 @@ exports.downloadExpenses = async (req, res, next) => {
         const expenses = await Expense.find(query).sort({date: -1});
 
         worksheet.addRows(expenses);
-
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.setHeader('Content-Disposition', 'attachment; filename=example.xlsx');
 

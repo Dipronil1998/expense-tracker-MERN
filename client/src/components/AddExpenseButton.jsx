@@ -31,7 +31,8 @@ const AddExpenseButton = () => {
     setSelectedCategoryFilter,
     tempSelectedCategoryFilter,
     setTempSelectedCategoryFilter,
-    validIncomeCategories
+    validIncomeCategories,
+    downloadExpenses
   } = useAppContext();
 
   const categories = validCategories.concat(validIncomeCategories);
@@ -71,6 +72,12 @@ const AddExpenseButton = () => {
     document.querySelector('.ant-select-selector').click(); 
   };
 
+  const download = (e)=>{
+    console.log(e.href,"Dip");
+    downloadExpenses();
+  }
+
+
   return (
     <div style={buttonStyle}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -103,10 +110,16 @@ const AddExpenseButton = () => {
             Cancel
           </Button>
         </div>
+        <div style={buttonGap}>
+          <Button onClick={download} variant="success">
+            Download
+          </Button>
+        </div>
+
       </div>
       <div className="">
         <Button variant="primary" onClick={openModal}>
-          Add Expense
+          Manage Expense
         </Button>
       </div>
       {/* Render the ExpenseModal component */}

@@ -5,7 +5,6 @@ import { Button, message, Popconfirm } from 'antd';
 import { useAppContext } from '../context/appContext';
 
 const Expense = ({ expenseData }) => {
-  console.log(expenseData?.type,"expenseData");
   const { deleteExpenses, setEditExpenses } = useAppContext();
   const confirm = (e) => {
     deleteExpenses(expenseData._id);

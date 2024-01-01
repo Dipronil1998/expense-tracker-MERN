@@ -7,7 +7,10 @@ import {
     TOGGLE_MODAL,
     SET_EDIT_EXPENSES,
     UPDATE_EXPENSES_SUCCESS,
-    GET_EXPENSES_BEGIN
+    GET_EXPENSES_BEGIN,
+    DOWNLOAD_EXPENSES_BEGIN,
+    DOWNLOAD_EXPENSES_SUCCESS,
+    DOWNLOAD_EXPENSES_ERROR,
 } from './Action'
 
 const Reducer = (state, action) => {
@@ -74,6 +77,18 @@ const Reducer = (state, action) => {
         return {
             ...state,
             isLoading:true,
+        }
+    }
+    if (action.type === DOWNLOAD_EXPENSES_BEGIN) {
+        return {
+            ...state,
+            isLoading:true,
+        }
+    }
+    if (action.type === DOWNLOAD_EXPENSES_SUCCESS) {
+        return {
+            ...state,
+            isLoading:false,
         }
     }
 }
