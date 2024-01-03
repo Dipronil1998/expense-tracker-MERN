@@ -1,4 +1,5 @@
-const Expense = require("../model/expense")
+const Expense = require("../model/expense");
+const ExcelJS = require('exceljs');
 const { validCategories } = require("../interface/dbEnum")
 exports.addExpenses = async (req, res, next) => {
     try {
@@ -65,7 +66,7 @@ exports.viewExpenses = async (req, res, next) => {
             };
         }
         const expenses = await Expense.find(query).sort({ date: -1 }).lean();
-       
+
         const categoryValues = [];
 
         for (const validCategory of validCategories) {
@@ -77,10 +78,10 @@ exports.viewExpenses = async (req, res, next) => {
                             $gte: firstDayOfMonth,
                             $lte: today
                         },
-                        $or:[
-                            {type: "Debits"}, {type: undefined}
+                        $or: [
+                            { type: "Debits" }, { type: undefined }
                         ]
-                        
+
                     }
                 },
                 {
@@ -109,7 +110,7 @@ exports.viewExpenses = async (req, res, next) => {
                         $gte: firstDayOfMonth,
                         $lte: today
                     },
-                    type:'Credits'
+                    type: 'Credits'
                 }
             },
             {
@@ -125,7 +126,7 @@ exports.viewExpenses = async (req, res, next) => {
             text: totalIncomes[0]?.totalAmount || 0
         };
         categoryValues.push(incomeResponse);
-        
+
         const remainingResponse = {
             title: `total Remaining this month`,
             text: (totalIncomes[0] === undefined) ? 0 : totalIncomes[0].totalAmount - totalExpensesThisMonth
@@ -171,45 +172,103 @@ exports.viewExpensesById = async (req, res, next) => {
 
 exports.updateExpenses = async (req, res, next) => {
     try {
-      const _id = req.params.id;
-  
-      const title = req.body.title;
-      const date = req.body.date ? new Date(req.body.date).setHours(0, 0, 0, 0) : new Date().setHours(0, 0, 0, 0);
-      const amount = req.body.amount;
-      const category = req.body.category;
-      const paymentMethod = req.body.paymentMethod;
-      const paymentBank = req.body.paymentBank;
-      const type = req.body.type || 'Debits';
-      const description = req.body.description;
-  
-      const expenses = await Expense.findOne({ _id: _id });
-  
-      if (!expenses) {
-        return res.status(404).json({ message: "Expenses not found." });
-      }
-  
-      const updateExpense = await Expense.updateOne(
-        { _id: _id },
-        {
-          title,
-          date,
-          amount,
-          category,
-          paymentMethod,
-          paymentBank,
-          type,
-          description,
-        }
-      );
-      if (updateExpense.modifiedCount > 0) {
-        return res.status(200).json({ message: "Expenses updated successfully." });
-      } else {
-        return res.status(404).json({ message: "No changes made to expenses." });
-      }
-    } catch (error) {
-      next(error);
-    }
-  };
-  
+        const _id = req.params.id;
 
+        const title = req.body.title;
+        const date = req.body.date ? new Date(req.body.date).setHours(0, 0, 0, 0) : new Date().setHours(0, 0, 0, 0);
+        const amount = req.body.amount;
+        const category = req.body.category;
+        const paymentMethod = req.body.paymentMethod;
+        const paymentBank = req.body.paymentBank;
+        const type = req.body.type || 'Debits';
+        const description = req.body.description;
+
+        const expenses = await Expense.findOne({ _id: _id });
+
+        if (!expenses) {
+            return res.status(404).json({ message: "Expenses not found." });
+        }
+
+        const updateExpense = await Expense.updateOne(
+            { _id: _id },
+            {
+                title,
+                date,
+                amount,
+                category,
+                paymentMethod,
+                paymentBank,
+                type,
+                description,
+            }
+        );
+        if (updateExpense.modifiedCount > 0) {
+            return res.status(200).json({ message: "Expenses updated successfully." });
+        } else {
+            return res.status(404).json({ message: "No changes made to expenses." });
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.downloadExpenses = async (req, res, next) => {
+    try {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Sheet 1');
+
+        // Add data to the worksheet
+        worksheet.columns = [
+            { header: 'Title', key: 'title', width: 20 },
+            { header: 'Date', key: 'date', width: 10 },
+            { header: 'Amount', key: 'amount', width: 20 },
+            { header: 'Category', key: 'category', width: 20 },
+            { header: 'Payment Method', key: 'paymentMethod', width: 20 },
+            { header: 'Payment Bank', key: 'paymentBank', width: 20 },
+            { header: 'Type', key: 'type', width: 20 },
+            { header: 'Description', key: 'description', width: 20 },
+        ];
+
+        let query = {};
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+        if (req.query.from && req.query.to) {
+            query.date = {
+                $gte: new Date(req.query.from).setHours(0, 0, 0, 0),
+                $lte: new Date(req.query.to).setHours(0, 0, 0, 0)
+            };
+        } else {
+            query.date = {
+                $gte: firstDayOfMonth,
+                $lte: today
+            };
+        }
+
+        if (req.query.categoryFilter) {
+            query = {
+                $and: [
+                    query,
+                    {
+                        category: {
+                            $in: JSON.parse(req.query.categoryFilter)
+                        }
+                    }
+                ]
+            };
+        }
+
+        const expenses = await Expense.find(query).sort({date: -1});
+
+        worksheet.addRows(expenses);
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=example.xlsx');
+
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (error) {
+        next(error)
+    }
+}
 

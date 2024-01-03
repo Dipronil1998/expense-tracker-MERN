@@ -31,7 +31,8 @@ const AddExpenseButton = () => {
     setSelectedCategoryFilter,
     tempSelectedCategoryFilter,
     setTempSelectedCategoryFilter,
-    validIncomeCategories
+    validIncomeCategories,
+    downloadExpenses
   } = useAppContext();
 
   const categories = validCategories.concat(validIncomeCategories);
@@ -71,6 +72,28 @@ const AddExpenseButton = () => {
     document.querySelector('.ant-select-selector').click(); 
   };
 
+  const handleDownloadClick = () => {
+    let baseUrl;
+    const { hostname } = window.location;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        baseUrl = "http://localhost:3001/api/v1";
+    } else {
+        baseUrl = "https://dipronil-expense-app.onrender.com/api/v1";
+    }
+    let url = `${baseUrl}/expenses/download/report?`
+    if(tempSelectedDates.length > 0){
+      console.log(tempSelectedDates[0].format("YYYY-MM-DD"), tempSelectedDates[1].format("YYYY-MM-DD"), "Dipronil");
+      url = url + `from=${tempSelectedDates[0].format("YYYY-MM-DD")}&to=${tempSelectedDates[1].format("YYYY-MM-DD")}`
+    }
+    if(tempSelectedCategoryFilter.length > 0){
+      const categoryFilterString = JSON.stringify(tempSelectedCategoryFilter);
+      url =url + `&categoryFilter=${categoryFilterString}`
+    }
+    console.log(url);
+    window.location.href = url;
+  };
+
+
   return (
     <div style={buttonStyle}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -103,10 +126,16 @@ const AddExpenseButton = () => {
             Cancel
           </Button>
         </div>
+        <div style={buttonGap}>
+          <Button onClick={handleDownloadClick} variant="success">
+            Download
+          </Button>
+        </div>
+
       </div>
       <div className="">
         <Button variant="primary" onClick={openModal}>
-          Add Expense
+          Manage Expense
         </Button>
       </div>
       {/* Render the ExpenseModal component */}

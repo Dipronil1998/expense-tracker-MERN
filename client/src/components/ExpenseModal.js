@@ -133,7 +133,7 @@ const ExpenseModal = ({ show }) => {
                   placeholder="yyyy-MM-dd"
                   pattern="\d{4}-\d{2}-\d{2}"
                   title="Please use the yyyy-MM-dd format"
-                  value={values.date ? format(new Date(values.date), 'yyyy-MM-dd') : ''}
+                  value={values.date ? format(new Date(values.date), 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd')}
                   onChange={handleInput}
                   max={format(new Date(), 'yyyy-MM-dd')}
                 />

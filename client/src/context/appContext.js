@@ -10,6 +10,9 @@ import {
     SET_EDIT_EXPENSES,
     UPDATE_EXPENSES_SUCCESS,
     GET_EXPENSES_BEGIN,
+    DOWNLOAD_EXPENSES_BEGIN,
+    DOWNLOAD_EXPENSES_SUCCESS,
+    DOWNLOAD_EXPENSES_ERROR
 } from './Action'
 
 const initialState = {
@@ -134,6 +137,19 @@ const AppProvider = ({ children }) => {
         }
     }
 
+    const downloadExpenses = async () =>{
+        dispatch({ type: DOWNLOAD_EXPENSES_BEGIN })
+        try {
+            const url = `${baseUrl}/expenses/download/report`; 
+            await axios.get(url);
+            dispatch({
+                type: DOWNLOAD_EXPENSES_SUCCESS,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         getAllExpenses(selectedDates, selectedCategoryFilter)
     }, [selectedDates, selectedCategoryFilter])
@@ -155,7 +171,8 @@ const AppProvider = ({ children }) => {
                 tempSelectedCategoryFilter,
                 setTempSelectedCategoryFilter,
                 setEditExpenses,
-                updateExpenses
+                updateExpenses,
+                downloadExpenses
             }}
         >
             {children}
