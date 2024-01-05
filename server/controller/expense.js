@@ -122,13 +122,13 @@ exports.viewExpenses = async (req, res, next) => {
         ]);
 
         const incomeResponse = {
-            title: `total Income this month`,
+            title: `Income this month`,
             text: totalIncomes[0]?.totalAmount || 0
         };
         categoryValues.push(incomeResponse);
 
         const remainingResponse = {
-            title: `total Remaining this month`,
+            title: `Remaining this month`,
             text: (totalIncomes[0] === undefined) ? 0 : totalIncomes[0].totalAmount - totalExpensesThisMonth
         };
         categoryValues.push(remainingResponse);
