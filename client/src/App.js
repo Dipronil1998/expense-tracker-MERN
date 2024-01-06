@@ -8,14 +8,6 @@ function App() {
   const { authModal, authorized } = useAppContext();
   const [isModalOpen, setIsModalOpen] = useState(authModal);
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
   return (
     <>
       {authModal && <AuthModal open={isModalOpen} />}
