@@ -29,7 +29,9 @@ const initialState = {
     alertType: "",
     alertText: "",
     isExpensesCreate: false,
-    showModal: false
+    showModal: false,
+    authModal:true,
+    authorized: false
 }
 
 const AppContext = React.createContext();
@@ -137,19 +139,6 @@ const AppProvider = ({ children }) => {
         }
     }
 
-    const downloadExpenses = async () =>{
-        dispatch({ type: DOWNLOAD_EXPENSES_BEGIN })
-        try {
-            const url = `${baseUrl}/expenses/download/report`; 
-            await axios.get(url);
-            dispatch({
-                type: DOWNLOAD_EXPENSES_SUCCESS,
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     useEffect(() => {
         getAllExpenses(selectedDates, selectedCategoryFilter)
     }, [selectedDates, selectedCategoryFilter])
@@ -172,7 +161,6 @@ const AppProvider = ({ children }) => {
                 setTempSelectedCategoryFilter,
                 setEditExpenses,
                 updateExpenses,
-                downloadExpenses
             }}
         >
             {children}

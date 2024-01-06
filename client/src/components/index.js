@@ -4,6 +4,7 @@ import ExpenseCards from './ExpenseCards';
 import ExpenseList from './ExpenseList';
 import FormRow from './FormRow';
 import FormRowSelect from './FormRowSelect';
+import AuthModal from './AuthModal';
 
 export {
     Expense,
@@ -12,4 +13,5 @@ export {
     ExpenseList,
     FormRow,
     FormRowSelect,
+    AuthModal,
 }
