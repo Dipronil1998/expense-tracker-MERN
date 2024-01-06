@@ -8,9 +8,7 @@ const AuthModal = ({ open}) => {
 
   const onFinish = (values) => {
     authenticateUser(values)
-    console.log(alertText,"alertText");
-    if(alertText){
-      console.log("DD");
+    if(alertText== "Invalid code"){
       message.error(alertText);
     }
   };
