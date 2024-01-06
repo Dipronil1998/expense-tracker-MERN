@@ -1,14 +1,28 @@
 import React from 'react'
-import { Modal, Button, Form, Input } from "antd";
+import { Modal, Button, Form, Input,message } from "antd";
+import { useAppContext } from '../context/appContext';
 
 
 const AuthModal = ({ open}) => {
+  const {authenticateUser, alertType,alertText } = useAppContext();
 
   const onFinish = (values) => {
-    console.log("Success:", values);
+    authenticateUser(values)
+    console.log(alertText,"alertText");
+    if(alertText){
+      console.log("DD");
+      message.error(alertText);
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+  };
+
+  const validateCode = (_, value) => {
+    if (alertText) {
+      return Promise.reject(alertText);
+    }
+    return Promise.resolve();
   };
 
   return (
@@ -37,6 +51,9 @@ const AuthModal = ({ open}) => {
                 required: true,
                 message: "Please input your code!",
               },
+              // {
+              //   validator: validateCode,
+              // },
             ]}
           >
             <Input />
