@@ -8,9 +8,9 @@ import {
     SET_EDIT_EXPENSES,
     UPDATE_EXPENSES_SUCCESS,
     GET_EXPENSES_BEGIN,
-    DOWNLOAD_EXPENSES_BEGIN,
-    DOWNLOAD_EXPENSES_SUCCESS,
-    DOWNLOAD_EXPENSES_ERROR,
+    AUTHENTICATE_BEGIN,
+    AUTHENTICATE_SUCCESS,
+    AUTHENTICATE_ERROR,
 } from './Action'
 
 const Reducer = (state, action) => {
@@ -23,7 +23,7 @@ const Reducer = (state, action) => {
     if (action.type === GET_EXPENSES_SUCCESS) {
         return {
             ...state,
-            isLoading:false,
+            isLoading: false,
             expensesData: action.payload.expensesData,
             cardData: action.payload.cardData,
         };
@@ -53,7 +53,7 @@ const Reducer = (state, action) => {
         return {
             ...state,
             showModal: !state.showModal,
-            expenses:"",
+            expenses: "",
             isEditing: false,
         }
     }
@@ -76,19 +76,35 @@ const Reducer = (state, action) => {
     if (action.type === GET_EXPENSES_BEGIN) {
         return {
             ...state,
-            isLoading:true,
+            isLoading: true,
         }
     }
-    if (action.type === DOWNLOAD_EXPENSES_BEGIN) {
+    if (action.type === AUTHENTICATE_BEGIN) {
         return {
             ...state,
             isLoading:true,
+            alertType: "",
+            alertText:""
         }
     }
-    if (action.type === DOWNLOAD_EXPENSES_SUCCESS) {
+    if (action.type === AUTHENTICATE_SUCCESS) {
         return {
             ...state,
             isLoading:false,
+            authModal:false,
+            authorized: true,
+            alertType: "",
+            alertText:""
+        }
+    }
+    if (action.type === AUTHENTICATE_ERROR) {
+        return {
+            ...state,
+            isLoading:false,
+            authModal:true,
+            authorized: false,
+            alertType: "danger",
+            alertText:action.payload.error
         }
     }
 }

@@ -1,25 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import './App.css';
-import { AddExpenseButton,ExpenseCards,ExpenseList } from "./components"
-
-
-const cardStyle = {
-  display: 'flex',
-  flexDirection: 'column'
-};
+import { AddExpenseButton, AuthModal, ExpenseCards, ExpenseList } from "./components"
+import { useAppContext } from './context/appContext';
 
 function App() {
+  const { authModal, authorized } = useAppContext();
+  const [isModalOpen, setIsModalOpen] = useState(authModal);
+
   return (
     <>
-      <Container style={cardStyle}>
-        <Row>
-          <ExpenseCards/>
-        </Row>
-        <AddExpenseButton/>
-      </Container>
-      <ExpenseList/>
-
+      {authModal && <AuthModal open={isModalOpen} />}
+      {!authModal && (
+        <>
+          <Container>
+            <Row>
+              <ExpenseCards />
+            </Row>
+            <AddExpenseButton />
+          </Container>
+          <ExpenseList />
+        </>
+      )}
     </>
   );
 }
