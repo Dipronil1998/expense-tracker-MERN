@@ -33,7 +33,6 @@ app.get('/', (req,res)=>{
 })
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/expenses', expensesRoute);
-app.use('/api/v2/expenses', expensesRoute);
 app.use(pageNotFound);
 app.use(errorHandler);
 

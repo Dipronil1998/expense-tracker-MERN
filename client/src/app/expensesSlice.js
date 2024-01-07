@@ -4,9 +4,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 let baseUrl;
 const { hostname } = window.location;
 if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    baseUrl = "http://localhost:3001/api/v2";
+    baseUrl = "http://localhost:3001/api/v1";
 } else {
-    baseUrl = "https://dipronil-expense-app.onrender.com/api/v2";
+    baseUrl = "https://dipronil-expense-app.onrender.com/api/v1";
 }
 
 export const expensesApi = createApi({
