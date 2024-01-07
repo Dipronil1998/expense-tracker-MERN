@@ -38,7 +38,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/expenses",
+					"raw": "{{host}}/expenses?categoryFilter=[\"Stock\", \"Mutual fund\",\"Other\"]",
 					"host": [
 						"{{host}}"
 					],
@@ -58,8 +58,7 @@
 						},
 						{
 							"key": "categoryFilter",
-							"value": "[\"Stock\", \"Mutual fund\",\"Other\"]",
-							"disabled": true
+							"value": "[\"Stock\", \"Mutual fund\",\"Other\"]"
 						}
 					]
 				}
@@ -135,7 +134,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/expenses/download/report",
+					"raw": "{{host}}/expenses/download/report?categoryFilter=[\"Interest\"]&from=2024-01-01&to=2024-01-06",
 					"host": [
 						"{{host}}"
 					],
@@ -143,6 +142,46 @@
 						"expenses",
 						"download",
 						"report"
+					],
+					"query": [
+						{
+							"key": "categoryFilter",
+							"value": "[\"Interest\"]"
+						},
+						{
+							"key": "from",
+							"value": "2024-01-01"
+						},
+						{
+							"key": "to",
+							"value": "2024-01-06"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\":\"4444\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/auth",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"auth"
 					]
 				}
 			},

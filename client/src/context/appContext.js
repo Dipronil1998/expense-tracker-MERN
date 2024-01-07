@@ -10,9 +10,9 @@ import {
     SET_EDIT_EXPENSES,
     UPDATE_EXPENSES_SUCCESS,
     GET_EXPENSES_BEGIN,
-    DOWNLOAD_EXPENSES_BEGIN,
-    DOWNLOAD_EXPENSES_SUCCESS,
-    DOWNLOAD_EXPENSES_ERROR
+    AUTHENTICATE_BEGIN,
+AUTHENTICATE_SUCCESS,
+AUTHENTICATE_ERROR,
 } from './Action'
 
 const initialState = {
@@ -29,7 +29,9 @@ const initialState = {
     alertType: "",
     alertText: "",
     isExpensesCreate: false,
-    showModal: false
+    showModal: false,
+    authModal:true,
+    authorized: false
 }
 
 const AppContext = React.createContext();
@@ -137,22 +139,29 @@ const AppProvider = ({ children }) => {
         }
     }
 
-    const downloadExpenses = async () =>{
-        dispatch({ type: DOWNLOAD_EXPENSES_BEGIN })
+    const authenticateUser = async (values) => {
+        dispatch({ type: AUTHENTICATE_BEGIN });
         try {
-            const url = `${baseUrl}/expenses/download/report`; 
-            await axios.get(url);
+            const url = `${baseUrl}/auth`;
+            const { data} = await axios.post(url, values);
+            console.log(data, "DD");
             dispatch({
-                type: DOWNLOAD_EXPENSES_SUCCESS,
+                type: AUTHENTICATE_SUCCESS,
             });
         } catch (error) {
-            console.log(error);
+            console.log("error",error.response.data.message);
+            dispatch({
+                type: AUTHENTICATE_ERROR,
+                payload: {
+                    error: error.response.data.message
+                }
+            });
         }
     }
 
     useEffect(() => {
         getAllExpenses(selectedDates, selectedCategoryFilter)
-    }, [selectedDates, selectedCategoryFilter])
+    }, [initialState.authorized, selectedDates, selectedCategoryFilter])
 
     return (
         <AppContext.Provider
@@ -172,7 +181,7 @@ const AppProvider = ({ children }) => {
                 setTempSelectedCategoryFilter,
                 setEditExpenses,
                 updateExpenses,
-                downloadExpenses
+                authenticateUser
             }}
         >
             {children}

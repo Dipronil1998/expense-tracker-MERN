@@ -32,7 +32,6 @@ const AddExpenseButton = () => {
     tempSelectedCategoryFilter,
     setTempSelectedCategoryFilter,
     validIncomeCategories,
-    downloadExpenses
   } = useAppContext();
 
   const categories = validCategories.concat(validIncomeCategories);

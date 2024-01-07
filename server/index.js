@@ -25,11 +25,13 @@ app.use(cors(corsOptions));
 const {pageNotFound} = require('./utils/PageNotFound');
 const {errorHandler} = require('./utils/ErrorHandler');
 const expensesRoute=require('./route/expense');
+const authRoute=require('./route/auth');
 const port = process.env.port;
 
 app.get('/', (req,res)=>{
     res.status(200).json({"message":"index"})
 })
+app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/expenses', expensesRoute);
 app.use('/api/v2/expenses', expensesRoute);
 app.use(pageNotFound);
