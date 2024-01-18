@@ -7,13 +7,15 @@ import { format } from 'date-fns';
 
 const initialState = {
   title: "",
-  type: "Debits", 
+  type: "Debits",
   date: "",
   amount: "",
   category: "",
   paymentMethod: "",
   paymentBank: "",
-  description: ""
+  description: "",
+  sourceBank:"",
+  destinationBank:""
 }
 
 const ExpenseModal = ({ show }) => {
@@ -29,6 +31,7 @@ const ExpenseModal = ({ show }) => {
     createExpenses,
     expenses,
     updateExpenses,
+    validType
   } = useAppContext();
 
   const closeModal = () => {
@@ -57,14 +60,20 @@ const ExpenseModal = ({ show }) => {
     } else if (isNaN(values.amount) || parseFloat(values.amount) <= 0) {
       newErrors.amount = 'Amount must be a positive number.';
     }
-    if (!values.category) {
+    if (values.type !== "Transfer" && !values.category) {
       newErrors.category = 'Category is required.';
     }
-    if (!values.paymentMethod) {
+    if (values.type !== "Transfer" && !values.paymentMethod) {
       newErrors.paymentMethod = 'Payment Method is required.';
     }
-    if (values.paymentMethod === "Online" && !values.paymentBank) {
+    if (values.type !== "Transfer" && values.paymentMethod === "Online" && !values.paymentBank) {
       newErrors.paymentBank = 'Payment Bank is required.';
+    }
+    if (values.type === "Transfer" && !values.sourceBank) {
+      newErrors.sourceBank = 'Source Bank is required.';
+    }
+    if (values.type === "Transfer" && !values.destinationBank) {
+      newErrors.destinationBank = 'Destination Bank is required.';
     }
 
     setErrors(newErrors);
@@ -82,6 +91,8 @@ const ExpenseModal = ({ show }) => {
         setValues(initialState)
         message.success('Expenses created successfully.');
       }
+    }else{
+      message.success('Something went wrong.');
     }
   }
 
@@ -116,8 +127,11 @@ const ExpenseModal = ({ show }) => {
                   onChange={handleInput}
                   required
                 >
-                  <option value="Debits">Debits</option>
-                  <option value="Credits">Credits</option>
+                  {validType.map((itemValue, index) => (
+                    <option key={index} value={itemValue}>
+                      {itemValue}
+                    </option>
+                  ))}
                 </Form.Control>
               </Form.Group>
             </div>
@@ -155,74 +169,122 @@ const ExpenseModal = ({ show }) => {
             </div>
           </div>
 
-          <div className="row">
-            <div className="col">
-              <Form.Group controlId="category">
-                <Form.Label>Category</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="category"
-                  value={values.category}
-                  onChange={handleInput}
-                  required
-                >
-                  <option value="">Select Category</option>
-                  {values.type === 'Debits'
-                    ? validCategories.map((itemValue, index) => (
-                        <option key={index} value={itemValue}>
-                          {itemValue}
-                        </option>
-                      ))
-                    : validIncomeCategories.map((itemValue, index) => (
+          {
+            values.type === 'Transfer' ? (
+              <div className="row">
+                <div className="col">
+                  <Form.Group controlId="paymentMethod">
+                    <Form.Label>Source Bank</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="sourceBank"
+                      value={values.sourceBank}
+                      onChange={handleInput}
+                      required
+                    >
+                      <option value="">Select Payment Method</option>
+                      {validPaymentBank.map((itemValue, index) => (
                         <option key={index} value={itemValue}>
                           {itemValue}
                         </option>
                       ))}
-                </Form.Control>
-                <Form.Text className="text-danger">{errors.category}</Form.Text>
-              </Form.Group>
-            </div>
-            <div className="col">
-              <Form.Group controlId="paymentMethod">
-                <Form.Label>Payment Method</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="paymentMethod"
-                  value={values.paymentMethod}
-                  onChange={handleInput}
-                  required
-                >
-                  <option value="">Select Payment Method</option>
-                  {validPaymentMethod.map((itemValue, index) => (
-                    <option key={index} value={itemValue}>
-                      {itemValue}
-                    </option>
-                  ))}
-                </Form.Control>
-                <Form.Text className="text-danger">{errors.paymentMethod}</Form.Text>
-              </Form.Group>
-            </div>
-            <div className="col">
-              <Form.Group controlId="paymentBank">
-                <Form.Label>Payment Bank</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="paymentBank"
-                  disabled={values.paymentMethod === 'Cash' ?? true}
-                  value={values.paymentBank}
-                  onChange={handleInput}
-                >
-                  <option value="">Select Bank</option>
-                  {validPaymentBank.map((itemValue, index) => (
-                    <option key={index} value={itemValue}>
-                      {itemValue}
-                    </option>
-                  ))}
-                </Form.Control>
-                <Form.Text className="text-danger">{errors.paymentBank}</Form.Text>
-              </Form.Group>
-            </div>
-          </div>
+                    </Form.Control>
+                    <Form.Text className="text-danger">{errors.sourceBank}</Form.Text>
+                  </Form.Group>
+                </div>
+
+                <div className="col">
+                  <Form.Group controlId="paymentMethod">
+                    <Form.Label>Destination Bank</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="destinationBank"
+                      value={values.destinationBank}
+                      onChange={handleInput}
+                      required
+                    >
+                      <option value="">Select Payment Method</option>
+                      {validPaymentBank.map((itemValue, index) => (
+                        <option key={index} value={itemValue}>
+                          {itemValue}
+                        </option>
+                      ))}
+                    </Form.Control>
+                    <Form.Text className="text-danger">{errors.destinationBank}</Form.Text>
+                  </Form.Group>
+                </div>
+              </div>
+            ) : (
+              <div className="row">
+                <div className="col">
+                  <Form.Group controlId="category">
+                    <Form.Label>Category</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="category"
+                      value={values.category}
+                      onChange={handleInput}
+                      required
+                    >
+                      <option value="">Select Category</option>
+                      {values.type === 'Debits'
+                        ? validCategories.map((itemValue, index) => (
+                          <option key={index} value={itemValue}>
+                            {itemValue}
+                          </option>
+                        ))
+                        : validIncomeCategories.map((itemValue, index) => (
+                          <option key={index} value={itemValue}>
+                            {itemValue}
+                          </option>
+                        ))}
+                    </Form.Control>
+                    <Form.Text className="text-danger">{errors.category}</Form.Text>
+                  </Form.Group>
+                </div>
+                <div className="col">
+                  <Form.Group controlId="paymentMethod">
+                    <Form.Label>Payment Method</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="paymentMethod"
+                      value={values.paymentMethod}
+                      onChange={handleInput}
+                      required
+                    >
+                      <option value="">Select Payment Method</option>
+                      {validPaymentMethod.map((itemValue, index) => (
+                        <option key={index} value={itemValue}>
+                          {itemValue}
+                        </option>
+                      ))}
+                    </Form.Control>
+                    <Form.Text className="text-danger">{errors.paymentMethod}</Form.Text>
+                  </Form.Group>
+                </div>
+                <div className="col">
+                  <Form.Group controlId="paymentBank">
+                    <Form.Label>Payment Bank</Form.Label>
+                    <Form.Control
+                      as="select"
+                      name="paymentBank"
+                      disabled={values.paymentMethod === 'Cash' ?? true}
+                      value={values.paymentBank}
+                      onChange={handleInput}
+                    >
+                      <option value="">Select Bank</option>
+                      {validPaymentBank.map((itemValue, index) => (
+                        <option key={index} value={itemValue}>
+                          {itemValue}
+                        </option>
+                      ))}
+                    </Form.Control>
+                    <Form.Text className="text-danger">{errors.paymentBank}</Form.Text>
+                  </Form.Group>
+                </div>
+              </div>
+            )
+          }
 
           {/* Row 4: Description */}
           <Form.Group controlId="description">

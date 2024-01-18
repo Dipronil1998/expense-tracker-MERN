@@ -20,12 +20,10 @@ const expensesSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        required: true,
         enum: validCategories.concat(validIncomeCategories)
     },
     paymentMethod: {
         type: String,
-        required: true,
         enum: validPaymentMethod
     },
     paymentBank: {
@@ -38,6 +36,14 @@ const expensesSchema = new mongoose.Schema({
     },
     description: {
         type: String,
+    },
+    sourceBank: {
+        type: String,
+        enum: validPaymentBank
+    },
+    destinationBank: {
+        type: String,
+        enum: validPaymentBank
     }
 }, {
     timestamps: true,

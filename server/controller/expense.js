@@ -12,6 +12,8 @@ exports.addExpenses = async (req, res, next) => {
         // When money is deducted from your account, it is typically referred to as a "debit."
         const type = req.body.type || 'Debits';
         const description = req.body.description;
+        const sourceBank = req.body.sourceBank;
+        const destinationBank = req.body.destinationBank;
 
         const newExpense = new Expense({
             title,
@@ -22,6 +24,8 @@ exports.addExpenses = async (req, res, next) => {
             paymentBank,
             type,
             description,
+            sourceBank,
+            destinationBank,
         });
         await newExpense.save();
         res.status(201).json({ message: 'Expense created successfully' });
@@ -70,37 +74,39 @@ exports.viewExpenses = async (req, res, next) => {
         const categoryValues = [];
 
         for (const validCategory of validCategories) {
-            const validCategorieExpensesMonthwise = await Expense.aggregate([
-                {
-                    $match: {
-                        category: validCategory,
-                        date: {
-                            $gte: firstDayOfMonth,
-                            $lte: today
-                        },
-                        $or: [
-                            { type: "Debits" }, { type: undefined }
-                        ]
-
+            if(validCategory != ""){
+                const validCategorieExpensesMonthwise = await Expense.aggregate([
+                    {
+                        $match: {
+                            category: validCategory,
+                            date: {
+                                $gte: firstDayOfMonth,
+                                $lte: today
+                            },
+                            $or: [
+                                { type: "Debits" }, { type: undefined }
+                            ]
+    
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            totalAmount: { $sum: "$amount" }
+                        }
                     }
-                },
-                {
-                    $group: {
-                        _id: null,
-                        totalAmount: { $sum: "$amount" }
-                    }
-                }
-            ]);
-
-            const totalValidCategorieExpensesMonthwise = validCategorieExpensesMonthwise.length > 0
-                ? validCategorieExpensesMonthwise[0]?.totalAmount
-                : 0;
-            totalExpensesThisMonth = totalExpensesThisMonth + totalValidCategorieExpensesMonthwise;
-            const response = {
-                title: `total ${validCategory} expenses this month`,
-                text: totalValidCategorieExpensesMonthwise
-            };
-            categoryValues.push(response);
+                ]);
+    
+                const totalValidCategorieExpensesMonthwise = validCategorieExpensesMonthwise.length > 0
+                    ? validCategorieExpensesMonthwise[0]?.totalAmount
+                    : 0;
+                totalExpensesThisMonth = totalExpensesThisMonth + totalValidCategorieExpensesMonthwise;
+                const response = {
+                    title: `total ${validCategory} expenses this month`,
+                    text: totalValidCategorieExpensesMonthwise
+                };
+                categoryValues.push(response);
+            }
         }
 
         const totalIncomes = await Expense.aggregate([
