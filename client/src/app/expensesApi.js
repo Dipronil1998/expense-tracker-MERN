@@ -1,4 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { setExpenses } from './reducer/expensesSlice'; 
 
 
 let baseUrl;
@@ -18,8 +19,11 @@ export const expensesApi = createApi({
                 url: '/expenses',
                 method: 'GET'
             }),
+          onSuccess: (data) => {
+            expensesApi.dispatch(setExpenses(data));
+          },
         }),
-    }),
+      }),
 })
 
 // Export hooks for usage in functional components, which are

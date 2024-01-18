@@ -2,6 +2,7 @@ import React from 'react';
 import Expense from './Expense'; // Import the Expense component
 import { useAppContext } from '../context/appContext';
 import Loader from './Loader';
+import { useSelector, useDispatch } from 'react-redux';
 
 const noDataMessageStyle = {
   color: '#888',
@@ -12,6 +13,8 @@ const noDataMessageStyle = {
 
 const ExpenseList = () => {
   const { expensesData, isLoading } = useAppContext();
+  const expenses = useSelector((state) => state);
+  console.log(expenses,"expenses");
 
   if (isLoading) {
     return <Loader />;
