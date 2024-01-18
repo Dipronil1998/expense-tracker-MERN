@@ -74,37 +74,39 @@ exports.viewExpenses = async (req, res, next) => {
         const categoryValues = [];
 
         for (const validCategory of validCategories) {
-            const validCategorieExpensesMonthwise = await Expense.aggregate([
-                {
-                    $match: {
-                        category: validCategory,
-                        date: {
-                            $gte: firstDayOfMonth,
-                            $lte: today
-                        },
-                        $or: [
-                            { type: "Debits" }, { type: undefined }
-                        ]
-
+            if(validCategory != ""){
+                const validCategorieExpensesMonthwise = await Expense.aggregate([
+                    {
+                        $match: {
+                            category: validCategory,
+                            date: {
+                                $gte: firstDayOfMonth,
+                                $lte: today
+                            },
+                            $or: [
+                                { type: "Debits" }, { type: undefined }
+                            ]
+    
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            totalAmount: { $sum: "$amount" }
+                        }
                     }
-                },
-                {
-                    $group: {
-                        _id: null,
-                        totalAmount: { $sum: "$amount" }
-                    }
-                }
-            ]);
-
-            const totalValidCategorieExpensesMonthwise = validCategorieExpensesMonthwise.length > 0
-                ? validCategorieExpensesMonthwise[0]?.totalAmount
-                : 0;
-            totalExpensesThisMonth = totalExpensesThisMonth + totalValidCategorieExpensesMonthwise;
-            const response = {
-                title: `total ${validCategory} expenses this month`,
-                text: totalValidCategorieExpensesMonthwise
-            };
-            categoryValues.push(response);
+                ]);
+    
+                const totalValidCategorieExpensesMonthwise = validCategorieExpensesMonthwise.length > 0
+                    ? validCategorieExpensesMonthwise[0]?.totalAmount
+                    : 0;
+                totalExpensesThisMonth = totalExpensesThisMonth + totalValidCategorieExpensesMonthwise;
+                const response = {
+                    title: `total ${validCategory} expenses this month`,
+                    text: totalValidCategorieExpensesMonthwise
+                };
+                categoryValues.push(response);
+            }
         }
 
         const totalIncomes = await Expense.aggregate([

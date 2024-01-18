@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"testing\",\r\n    \"date\": \"\",\r\n    \"amount\": 1000,\r\n    \"category\": \"Mutual fund\",\r\n    \"paymentMethod\": \"Online\",\r\n    \"paymentBank\": \"HDFC\",\r\n    \"type\":\"Debits\",\r\n    \"description\": \"\"\r\n}",
+					"raw": "{\r\n    \"title\": \"ff\",\r\n    \"type\": \"Debits\",\r\n    \"date\": \"\",\r\n    \"amount\": \"444\",\r\n    \"category\": \"Other\",\r\n    \"paymentMethod\": \"Cash\",\r\n    \"paymentBank\": \"\",\r\n    \"description\": \"\",\r\n    \"sourceBank\": \"\",\r\n    \"destinationBank\": \"\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -182,6 +182,23 @@
 					],
 					"path": [
 						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "backup database",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/backup",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"backup"
 					]
 				}
 			},

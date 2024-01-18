@@ -82,7 +82,6 @@ const ExpenseModal = ({ show }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(values,"values");
     if (validateForm()) {
       if (isEditing) {
         updateExpenses(values);
