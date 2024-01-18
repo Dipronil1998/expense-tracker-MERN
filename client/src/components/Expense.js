@@ -38,11 +38,20 @@ const Expense = ({ expenseData }) => {
           <span className="expense-date">Date: {moment(expenseData.date).format('DD-MM-YYYY')}</span>
           <span className="expense-amount">Amount: ₹{expenseData.amount}</span>
         </p>
-        <p className="expense-details">
-          <span className="expense-category">Category: {expenseData.category}</span>
-          <span className="expense-paymentMethod">Payment Method: {expenseData.paymentMethod}</span>
-          <span className="expense-paymentBank">Payment Bank: {expenseData.paymentBank}</span>
-        </p>
+        {
+          expenseData.type === 'Transfer' ? (
+            <p className="expense-details">
+              <span className="expense-category">Source Bank: {expenseData.sourceBank}</span>
+              <span className="expense-paymentMethod">Destination Bank: {expenseData.destinationBank}</span>
+            </p>
+          ) : (
+            <p className="expense-details">
+              <span className="expense-category">Category: {expenseData.category}</span>
+              <span className="expense-paymentMethod">Payment Method: {expenseData.paymentMethod}</span>
+              <span className="expense-paymentBank">Payment Bank: {expenseData.paymentBank}</span>
+            </p>
+          )
+        }
         <p className="expense-description">Description: {expenseData.description}</p>
       </div>
     </div>

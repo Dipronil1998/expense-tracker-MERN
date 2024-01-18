@@ -1,8 +1,8 @@
 
-const validCategories = ["Stock", "Mutual fund", "Self", "Other"];
-const validPaymentMethod = ["Cash", "Online"];
+const validCategories = ["", "Stock", "Mutual fund", "Self", "Other"];
+const validPaymentMethod = ["", "Cash", "Online"];
 const validPaymentBank = ["", "SBI", "HDFC", "ICICI", "INDIAN", "PAYTM"];
-const validType = ["Credits", "Debits"];
+const validType = ["Credits", "Debits", "Transfer"];
 const validIncomeCategories = ["Profit", "Dividend", "Interest", "Salary", "Freelancing", "Stock", "Mutual fund", "Other"];
 
 module.exports = {

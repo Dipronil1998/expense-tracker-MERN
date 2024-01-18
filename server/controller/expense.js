@@ -12,6 +12,8 @@ exports.addExpenses = async (req, res, next) => {
         // When money is deducted from your account, it is typically referred to as a "debit."
         const type = req.body.type || 'Debits';
         const description = req.body.description;
+        const sourceBank = req.body.sourceBank;
+        const destinationBank = req.body.destinationBank;
 
         const newExpense = new Expense({
             title,
@@ -22,6 +24,8 @@ exports.addExpenses = async (req, res, next) => {
             paymentBank,
             type,
             description,
+            sourceBank,
+            destinationBank,
         });
         await newExpense.save();
         res.status(201).json({ message: 'Expense created successfully' });
