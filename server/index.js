@@ -26,6 +26,7 @@ const {pageNotFound} = require('./utils/PageNotFound');
 const {errorHandler} = require('./utils/ErrorHandler');
 const expensesRoute=require('./route/expense');
 const authRoute=require('./route/auth');
+const backupRoute=require('./route/backup');
 const port = process.env.port;
 
 app.get('/', (req,res)=>{
@@ -33,6 +34,7 @@ app.get('/', (req,res)=>{
 })
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/expenses', expensesRoute);
+app.use('/api/v1/backup', backupRoute);
 app.use(pageNotFound);
 app.use(errorHandler);
 
