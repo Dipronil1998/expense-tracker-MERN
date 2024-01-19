@@ -16,7 +16,15 @@ const Expense = ({ expenseData }) => {
   return (
     <div className="parent-container">
       <div className="expense-card" style={{
-        backgroundColor: (expenseData?.type === undefined || (expenseData.type === 'Debits')) ? '#FFCECE' : '#B9FF94'
+       backgroundColor: (() => {
+          if (expenseData?.type === undefined || expenseData.type === 'Debits') {
+            return '#FFCECE'; 
+          } else if (expenseData.type === 'Credits') {
+            return '#B9FF94'; 
+          } else if (expenseData.type === 'Transfer') {
+            return '#8AE3E1'; 
+          } 
+        })()
       }}>
         <div className="expense-header">
           <h3>{expenseData.title}</h3>
