@@ -249,6 +249,14 @@ exports.updateExpenses = async (req, res, next) => {
                 } else {
                     await creditsBankAmount(expenses.paymentBank, (Number(expenses.amount)) - Number(amount));
                 }
+            } else if(expenses.type == 'Transfer') {
+                if(expenses.amount > amount){
+                    await creditsBankAmount(expenses.sourceBank, (Number(expenses.amount)) - Number(amount));
+                    await debitsBankAmount(expenses.destinationBank, (Number(expenses.amount)) - Number(amount));
+                } else {
+                    await debitsBankAmount(expenses.sourceBank, (Number(amount) - Number(expenses.amount)));
+                    await creditsBankAmount(expenses.destinationBank, (Number(amount) - Number(expenses.amount)));
+                }
             }
             return res.status(200).json({ message: "Expenses updated successfully." });
         } else {
