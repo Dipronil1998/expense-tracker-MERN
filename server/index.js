@@ -27,8 +27,9 @@ const {errorHandler} = require('./utils/ErrorHandler');
 const expensesRoute=require('./route/expense');
 const authRoute=require('./route/auth');
 const backupRoute=require('./route/backup');
+const { updateAmountToZero } = require('./helper/updateAmountToZero');
 const port = process.env.port;
-
+updateAmountToZero();
 app.get('/', (req,res)=>{
     res.status(200).json({"message":"index"})
 })
