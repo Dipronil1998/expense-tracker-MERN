@@ -176,6 +176,9 @@ exports.deleteExpenses = async (req, res, next) => {
                 await creditsBankAmount(expenses.paymentBank, expenses.amount);
             } else if(isDelete.acknowledged && expenses.type == "Credits"){
                 await debitsBankAmount(expenses.paymentBank, expenses.amount);
+            } else if(isDelete.acknowledged && expenses.type == "Transfer"){
+                await creditsBankAmount(expenses.sourceBank, expenses.amount);
+                await debitsBankAmount(expenses.destinationBank, expenses.amount);
             }
             return res.status(200).json({ message: "Expenses delete successfully." });
         } else {
