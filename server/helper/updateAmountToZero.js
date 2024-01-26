@@ -10,7 +10,7 @@ exports.updateAmountToZero = async () => {
 
             console.log('Amount updated to 0 for all documents on the first day of the month.');
           } else {
-            console.log('Today is not the last day of the month. No update needed.');
+            console.log('Today is not the first day of the month. No update needed.');
           }
     } catch (error) {
         console.error('Error updating amount:', error.message);
