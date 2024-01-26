@@ -1,6 +1,9 @@
 const Expense = require("../model/expense");
+const Bank = require("../model/bank");
 const ExcelJS = require('exceljs');
-const { validCategories } = require("../interface/dbEnum")
+const { validCategories } = require("../interface/dbEnum");
+const { reblanceBankAmount, debitsBankAmount, creditsBankAmount } = require("../helper/reblanceBankAmount");
+
 exports.addExpenses = async (req, res, next) => {
     try {
         const title = req.body.title;
@@ -27,7 +30,14 @@ exports.addExpenses = async (req, res, next) => {
             sourceBank,
             destinationBank,
         });
-        await newExpense.save();
+        const isSave = await newExpense.save();
+        if(isSave && type =='Transfer'){
+            await reblanceBankAmount(sourceBank,destinationBank, amount);
+        } else if(isSave && type =='Debits'){
+            await debitsBankAmount(paymentBank, amount);
+        } else if(isSave && type =='Credits'){
+            await creditsBankAmount(paymentBank, amount);
+        }
         res.status(201).json({ message: 'Expense created successfully' });
     } catch (error) {
         next(error)
@@ -138,6 +148,15 @@ exports.viewExpenses = async (req, res, next) => {
             text: (totalIncomes[0] === undefined) ? 0 : totalIncomes[0].totalAmount - totalExpensesThisMonth
         };
         categoryValues.push(remainingResponse);
+
+        const bankAmounts = await Bank.find({},{ _id: 0, bankName: 1, amount: 1 });
+        bankAmounts.map((bankAmount)=>{
+            const bankData = {
+                title:`${bankAmount.bankName} bank availavle amount current month`,
+                text: bankAmount.amount
+            }
+            categoryValues.push(bankData);
+        })
 
         res.status(200).json({ response: expenses, cardResponse: categoryValues });
     } catch (error) {
