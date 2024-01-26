@@ -149,14 +149,14 @@ exports.viewExpenses = async (req, res, next) => {
         };
         categoryValues.push(remainingResponse);
 
-        // const bankAmounts = await Bank.find({},{ _id: 0, bankName: 1, amount: 1 });
-        // bankAmounts.map((bankAmount)=>{
-        //     const bankData = {
-        //         title:`${bankAmount.bankName} bank availavle amount current month`,
-        //         text: bankAmount.amount
-        //     }
-        //     categoryValues.push(bankData);
-        // })
+        const bankAmounts = await Bank.find({},{ _id: 0, bankName: 1, amount: 1 });
+        bankAmounts.map((bankAmount)=>{
+            const bankData = {
+                title:`${bankAmount.bankName} bank availavle amount current month`,
+                text: bankAmount.amount
+            }
+            categoryValues.push(bankData);
+        })
 
         res.status(200).json({ response: expenses, cardResponse: categoryValues });
     } catch (error) {
@@ -171,7 +171,13 @@ exports.deleteExpenses = async (req, res, next) => {
         const _id = req.params.id;
         const expenses = await Expense.findOne({ _id: _id });
         if (expenses) {
-            await Expense.deleteOne({ _id: _id });
+            const isDelete = await Expense.deleteOne({ _id: _id });
+            console.log(expenses);
+            if(isDelete.acknowledged && expenses.type == "Debits"){
+                await creditsBankAmount(expenses.paymentBank, expenses.amount);
+            } else if(isDelete.acknowledged && expenses.type == "Credits"){
+                await debitsBankAmount(expenses.paymentBank, expenses.amount);
+            }
             return res.status(200).json({ message: "Expenses delete successfully." });
         } else {
             return res.status(404).json({ message: "Expenses not found" });
