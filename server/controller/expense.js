@@ -149,14 +149,14 @@ exports.viewExpenses = async (req, res, next) => {
         };
         categoryValues.push(remainingResponse);
 
-        // const bankAmounts = await Bank.find({},{ _id: 0, bankName: 1, amount: 1 });
-        // bankAmounts.map((bankAmount)=>{
-        //     const bankData = {
-        //         title:`${bankAmount.bankName} bank availavle amount current month`,
-        //         text: bankAmount.amount
-        //     }
-        //     categoryValues.push(bankData);
-        // })
+        const bankAmounts = await Bank.find({},{ _id: 0, bankName: 1, amount: 1 });
+        bankAmounts.map((bankAmount)=>{
+            const bankData = {
+                title:`${bankAmount.bankName} bank availavle amount current month`,
+                text: bankAmount.amount
+            }
+            categoryValues.push(bankData);
+        })
 
         res.status(200).json({ response: expenses, cardResponse: categoryValues });
     } catch (error) {
@@ -171,7 +171,15 @@ exports.deleteExpenses = async (req, res, next) => {
         const _id = req.params.id;
         const expenses = await Expense.findOne({ _id: _id });
         if (expenses) {
-            await Expense.deleteOne({ _id: _id });
+            const isDelete = await Expense.deleteOne({ _id: _id });
+            if(isDelete.acknowledged && expenses.type == "Debits"){
+                await creditsBankAmount(expenses.paymentBank, expenses.amount);
+            } else if(isDelete.acknowledged && expenses.type == "Credits"){
+                await debitsBankAmount(expenses.paymentBank, expenses.amount);
+            } else if(isDelete.acknowledged && expenses.type == "Transfer"){
+                await creditsBankAmount(expenses.sourceBank, expenses.amount);
+                await debitsBankAmount(expenses.destinationBank, expenses.amount);
+            }
             return res.status(200).json({ message: "Expenses delete successfully." });
         } else {
             return res.status(404).json({ message: "Expenses not found" });
@@ -225,9 +233,31 @@ exports.updateExpenses = async (req, res, next) => {
                 paymentBank,
                 type,
                 description,
-            }
+            },
+            { new: true }
         );
         if (updateExpense.modifiedCount > 0) {
+            if(expenses.type == 'Credits'){
+                if(expenses.amount < amount){
+                    await creditsBankAmount(expenses.paymentBank, (Number(amount) - Number(expenses.amount)));
+                } else {
+                    await debitsBankAmount(expenses.paymentBank, (Number(expenses.amount)) - Number(amount));
+                }
+            } else if(expenses.type == 'Debits') {
+                if(expenses.amount < amount){
+                    await debitsBankAmount(expenses.paymentBank, (Number(amount) - Number(expenses.amount)));
+                } else {
+                    await creditsBankAmount(expenses.paymentBank, (Number(expenses.amount)) - Number(amount));
+                }
+            } else if(expenses.type == 'Transfer') {
+                if(expenses.amount > amount){
+                    await creditsBankAmount(expenses.sourceBank, (Number(expenses.amount)) - Number(amount));
+                    await debitsBankAmount(expenses.destinationBank, (Number(expenses.amount)) - Number(amount));
+                } else {
+                    await debitsBankAmount(expenses.sourceBank, (Number(amount) - Number(expenses.amount)));
+                    await creditsBankAmount(expenses.destinationBank, (Number(amount) - Number(expenses.amount)));
+                }
+            }
             return res.status(200).json({ message: "Expenses updated successfully." });
         } else {
             return res.status(404).json({ message: "No changes made to expenses." });
