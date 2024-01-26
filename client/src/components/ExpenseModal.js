@@ -181,6 +181,7 @@ const ExpenseModal = ({ show }) => {
                       value={values.sourceBank}
                       onChange={handleInput}
                       required
+                      disabled = {isEditing ? true : false}
                     >
                       <option value="">Select Payment Method</option>
                       {validPaymentBank.map((itemValue, index) => (
@@ -202,6 +203,7 @@ const ExpenseModal = ({ show }) => {
                       value={values.destinationBank}
                       onChange={handleInput}
                       required
+                      disabled = {isEditing ? true : false}
                     >
                       <option value="">Select Payment Method</option>
                       {validPaymentBank.map((itemValue, index) => (
