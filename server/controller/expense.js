@@ -152,7 +152,7 @@ exports.viewExpenses = async (req, res, next) => {
         const bankAmounts = await Bank.find({},{ _id: 0, bankName: 1, amount: 1 });
         bankAmounts.map((bankAmount)=>{
             const bankData = {
-                title:`${bankAmount.bankName} bank availavle amount`,
+                title:`${bankAmount.bankName} bank availavle amount current month`,
                 text: bankAmount.amount
             }
             categoryValues.push(bankData);
