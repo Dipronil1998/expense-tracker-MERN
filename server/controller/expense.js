@@ -1,7 +1,7 @@
 const Expense = require("../model/expense");
 const ExcelJS = require('exceljs');
 const { validCategories } = require("../interface/dbEnum");
-const { reblanceBankAmount } = require("../helper/reblanceBankAmount");
+const { reblanceBankAmount, debitsBankAmount, creditsBankAmount } = require("../helper/reblanceBankAmount");
 exports.addExpenses = async (req, res, next) => {
     try {
         const title = req.body.title;
@@ -31,6 +31,10 @@ exports.addExpenses = async (req, res, next) => {
         const isSave = await newExpense.save();
         if(isSave && type =='Transfer'){
             await reblanceBankAmount(sourceBank,destinationBank, amount);
+        } else if(isSave && type =='Debits'){
+            await debitsBankAmount(paymentBank, amount);
+        } else if(isSave && type =='Credits'){
+            await creditsBankAmount(paymentBank, amount);
         }
         res.status(201).json({ message: 'Expense created successfully' });
     } catch (error) {

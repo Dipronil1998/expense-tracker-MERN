@@ -15,3 +15,21 @@ exports.reblanceBankAmount = async (sourceBank,destinationBank, amount)=>{
 
     return true; 
 }
+
+exports.debitsBankAmount = async (paymentBank, amount) =>{
+    const sourceBankUpdate = await Bank.findOneAndUpdate(
+        { bankName: paymentBank },
+        { $inc: { amount: -amount } },
+        { new: true,upsert: true }
+    );
+    return sourceBankUpdate;
+}
+
+exports.creditsBankAmount = async (paymentBank, amount) =>{
+    const sourceBankUpdate = await Bank.findOneAndUpdate(
+        { bankName: paymentBank },
+        { $inc: { amount: amount } },
+        { new: true,upsert: true }
+    );
+    return sourceBankUpdate;
+}
