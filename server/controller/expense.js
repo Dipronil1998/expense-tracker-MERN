@@ -172,7 +172,6 @@ exports.deleteExpenses = async (req, res, next) => {
         const expenses = await Expense.findOne({ _id: _id });
         if (expenses) {
             const isDelete = await Expense.deleteOne({ _id: _id });
-            console.log(expenses);
             if(isDelete.acknowledged && expenses.type == "Debits"){
                 await creditsBankAmount(expenses.paymentBank, expenses.amount);
             } else if(isDelete.acknowledged && expenses.type == "Credits"){
@@ -231,9 +230,23 @@ exports.updateExpenses = async (req, res, next) => {
                 paymentBank,
                 type,
                 description,
-            }
+            },
+            { new: true }
         );
         if (updateExpense.modifiedCount > 0) {
+            if(expenses.type == 'Credits'){
+                if(expenses.amount < amount){
+                    await creditsBankAmount(expenses.paymentBank, (Number(amount) - Number(expenses.amount)));
+                } else {
+                    await debitsBankAmount(expenses.paymentBank, (Number(expenses.amount)) - Number(amount));
+                }
+            } else if(expenses.type == 'Debits') {
+                if(expenses.amount < amount){
+                    await debitsBankAmount(expenses.paymentBank, (Number(amount) - Number(expenses.amount)));
+                } else {
+                    await creditsBankAmount(expenses.paymentBank, (Number(expenses.amount)) - Number(amount));
+                }
+            }
             return res.status(200).json({ message: "Expenses updated successfully." });
         } else {
             return res.status(404).json({ message: "No changes made to expenses." });
