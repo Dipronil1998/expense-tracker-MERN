@@ -275,12 +275,14 @@ exports.downloadExpenses = async (req, res, next) => {
         // Add data to the worksheet
         worksheet.columns = [
             { header: 'Title', key: 'title', width: 20 },
-            { header: 'Date', key: 'date', width: 10 },
+            { header: 'Date', key: 'date', width: 20 },
             { header: 'Amount', key: 'amount', width: 20 },
             { header: 'Category', key: 'category', width: 20 },
             { header: 'Payment Method', key: 'paymentMethod', width: 20 },
             { header: 'Payment Bank', key: 'paymentBank', width: 20 },
             { header: 'Type', key: 'type', width: 20 },
+            { header: 'Source Bank', key: 'sourceBank', width: 20 },
+            { header: 'Destination Bank', key: 'destinationBank', width: 20 },
             { header: 'Description', key: 'description', width: 20 },
         ];
 
