@@ -32,7 +32,7 @@ const Expense = ({ expenseData }) => {
             <button className="edit-button" onClick={() => setEditExpenses(expenseData._id)}>Edit</button>
             <Popconfirm
               title="Delete the Expenses"
-              description="Are you sure to delete Dipronil this Expenses?"
+              description="Are you sure to delete this Expenses?"
               onConfirm={confirm}
               onCancel={cancel}
               okText="Yes"
