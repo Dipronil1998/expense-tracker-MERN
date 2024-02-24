@@ -144,10 +144,12 @@ const AppProvider = ({ children }) => {
         try {
             const url = `${baseUrl}/auth`;
             const { data} = await axios.post(url, values);
+            console.log(data, "DD");
             dispatch({
                 type: AUTHENTICATE_SUCCESS,
             });
         } catch (error) {
+            console.log("error",error.response.data.message);
             dispatch({
                 type: AUTHENTICATE_ERROR,
                 payload: {
