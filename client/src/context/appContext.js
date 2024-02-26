@@ -160,8 +160,10 @@ const AppProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        getAllExpenses(selectedDates, selectedCategoryFilter)
-    }, [initialState.authorized, selectedDates, selectedCategoryFilter])
+        if(state.authorized){
+            getAllExpenses(selectedDates, selectedCategoryFilter)
+        }
+    }, [state.authorized, selectedDates, selectedCategoryFilter])
 
     return (
         <AppContext.Provider

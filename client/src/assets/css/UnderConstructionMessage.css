@@ -1,0 +1,17 @@
+
+.under-construction-container {
+    text-align: center;
+    margin-top: 100px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .under-construction-container h1 {
+    font-size: 2em;
+    color: #ff0000; /* Red color, you can customize this */
+  }
+  
+  .under-construction-container p {
+    font-size: 1.2em;
+    color: #555; /* Dark gray color, you can customize this */
+  }
+  

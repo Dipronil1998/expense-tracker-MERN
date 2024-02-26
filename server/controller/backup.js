@@ -9,17 +9,23 @@ const destinationCollectionName = process.env.destinationCollectionName;
 
 exports.backupDB = async (req,res,next) =>{
     try {
+        const sourceCollectionNameArray=sourceCollectionName.split(",");
+        const destinationCollectionNameArray=destinationCollectionName.split(",");
+
         const client = new MongoClient(mongoUrl, { useUnifiedTopology: true });
         await client.connect();
 
         const sourceDb = client.db(sourceDbName);
         const destinationDb = client.db(destinationDbName);
 
-        const documents = await sourceDb.collection(sourceCollectionName).find().toArray();
-
-        await destinationDb.collection(destinationCollectionName).deleteMany({});
+        for (const collectionName of sourceCollectionNameArray) {
+            
+            const documents = await sourceDb.collection(collectionName).find().toArray();
+            
+            await destinationDb.collection(collectionName).deleteMany({});
         
-        await destinationDb.collection(destinationCollectionName).insertMany(documents);
+            await destinationDb.collection(collectionName).insertMany(documents);
+        }
 
         await client.close();
 
