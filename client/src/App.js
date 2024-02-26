@@ -14,10 +14,8 @@ function App() {
     const currentDate = new Date();
 
     if (currentDate.getDate() === 1) {
-      console.log('Site is not open on the 1st of the month');
       setIsOpenSite(false)
     } else {
-      console.log('Site is open');
       setIsOpenSite(true)
     }
   }, [isOpenSite]);
