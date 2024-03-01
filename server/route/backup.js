@@ -5,5 +5,6 @@ const backupController=require('../controller/backup');
 
 
 router.post('/',backupController.backupDB);
+router.get('/updateAmountToZero',backupController.updateAmountToZero);
 
 module.exports = router;
