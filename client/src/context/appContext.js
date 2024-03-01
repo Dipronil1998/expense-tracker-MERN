@@ -11,8 +11,11 @@ import {
     UPDATE_EXPENSES_SUCCESS,
     GET_EXPENSES_BEGIN,
     AUTHENTICATE_BEGIN,
-AUTHENTICATE_SUCCESS,
-AUTHENTICATE_ERROR,
+    AUTHENTICATE_SUCCESS,
+    AUTHENTICATE_ERROR,
+    AMOUNT_ZERO_BEGIN,
+    AMOUNT_ZERO_SUCCESS,
+    AMOUNT_ZERO_ERROR,
 } from './Action'
 
 const initialState = {
@@ -30,7 +33,7 @@ const initialState = {
     alertText: "",
     isExpensesCreate: false,
     showModal: false,
-    authModal:true,
+    authModal: true,
     authorized: false
 }
 
@@ -143,13 +146,13 @@ const AppProvider = ({ children }) => {
         dispatch({ type: AUTHENTICATE_BEGIN });
         try {
             const url = `${baseUrl}/auth`;
-            const { data} = await axios.post(url, values);
+            const { data } = await axios.post(url, values);
             console.log(data, "DD");
             dispatch({
                 type: AUTHENTICATE_SUCCESS,
             });
         } catch (error) {
-            console.log("error",error.response.data.message);
+            console.log("error", error.response.data.message);
             dispatch({
                 type: AUTHENTICATE_ERROR,
                 payload: {
@@ -159,8 +162,29 @@ const AppProvider = ({ children }) => {
         }
     }
 
+    const updateAmountToZero = async () => {
+        dispatch({type:AMOUNT_ZERO_BEGIN});
+        try {
+            const url = `${baseUrl}/backup/updateAmountToZero`;
+            const { data } = await axios.get(url);
+            dispatch({
+                type: AMOUNT_ZERO_SUCCESS,
+                payload: {
+                    message: data.message
+                }
+            });
+        } catch (error) {
+            dispatch({
+                type: AMOUNT_ZERO_ERROR,
+                payload: {
+                    error: error.response.data.message
+                }
+            });
+        }
+    }
+
     useEffect(() => {
-        if(state.authorized){
+        if (state.authorized) {
             getAllExpenses(selectedDates, selectedCategoryFilter)
         }
     }, [state.authorized, selectedDates, selectedCategoryFilter])
@@ -183,7 +207,8 @@ const AppProvider = ({ children }) => {
                 setTempSelectedCategoryFilter,
                 setEditExpenses,
                 updateExpenses,
-                authenticateUser
+                authenticateUser,
+                updateAmountToZero
             }}
         >
             {children}

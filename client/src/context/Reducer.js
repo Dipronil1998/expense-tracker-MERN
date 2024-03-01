@@ -11,6 +11,9 @@ import {
     AUTHENTICATE_BEGIN,
     AUTHENTICATE_SUCCESS,
     AUTHENTICATE_ERROR,
+    AMOUNT_ZERO_BEGIN,
+    AMOUNT_ZERO_SUCCESS,
+    AMOUNT_ZERO_ERROR,
 } from './Action'
 
 const Reducer = (state, action) => {
@@ -103,6 +106,28 @@ const Reducer = (state, action) => {
             isLoading:false,
             authModal:true,
             authorized: false,
+            alertType: "danger",
+            alertText:action.payload.error
+        }
+    }
+    if (action.type === AMOUNT_ZERO_BEGIN) {
+        return {
+            ...state,
+            isLoading:true,
+        }
+    }
+    if (action.type === AMOUNT_ZERO_SUCCESS) {
+        return {
+            ...state,
+            isLoading:false,
+            alertType: "success",
+            alertText:action.payload.message
+        }
+    }
+    if (action.type === AMOUNT_ZERO_ERROR) {
+        return {
+            ...state,
+            isLoading:false,
             alertType: "danger",
             alertText:action.payload.error
         }
