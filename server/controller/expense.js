@@ -1,5 +1,6 @@
 const Expense = require("../model/expense");
 const Bank = require("../model/bank");
+const Reminder = require("../model/reminder");
 const ExcelJS = require('exceljs');
 const { validCategories } = require("../interface/dbEnum");
 const { reblanceBankAmount, debitsBankAmount, creditsBankAmount } = require("../helper/reblanceBankAmount");
@@ -31,11 +32,11 @@ exports.addExpenses = async (req, res, next) => {
             destinationBank,
         });
         const isSave = await newExpense.save();
-        if(isSave && type =='Transfer'){
-            await reblanceBankAmount(sourceBank,destinationBank, amount);
-        } else if(isSave && type =='Debits'){
+        if (isSave && type == 'Transfer') {
+            await reblanceBankAmount(sourceBank, destinationBank, amount);
+        } else if (isSave && type == 'Debits') {
             await debitsBankAmount(paymentBank, amount);
-        } else if(isSave && type =='Credits'){
+        } else if (isSave && type == 'Credits') {
             await creditsBankAmount(paymentBank, amount);
         }
         res.status(201).json({ message: 'Expense created successfully' });
@@ -47,6 +48,7 @@ exports.addExpenses = async (req, res, next) => {
 exports.viewExpenses = async (req, res, next) => {
     try {
         let query = {};
+        const categoryValues = [];
         let totalExpensesThisMonth = 0;
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -81,10 +83,10 @@ exports.viewExpenses = async (req, res, next) => {
         }
         const expenses = await Expense.find(query).sort({ date: -1 }).lean();
 
-        const categoryValues = [];
+
 
         for (const validCategory of validCategories) {
-            if(validCategory != ""){
+            if (validCategory != "") {
                 const validCategorieExpensesMonthwise = await Expense.aggregate([
                     {
                         $match: {
@@ -96,7 +98,7 @@ exports.viewExpenses = async (req, res, next) => {
                             $or: [
                                 { type: "Debits" }, { type: undefined }
                             ]
-    
+
                         }
                     },
                     {
@@ -106,7 +108,7 @@ exports.viewExpenses = async (req, res, next) => {
                         }
                     }
                 ]);
-    
+
                 const totalValidCategorieExpensesMonthwise = validCategorieExpensesMonthwise.length > 0
                     ? validCategorieExpensesMonthwise[0]?.totalAmount
                     : 0;
@@ -149,16 +151,26 @@ exports.viewExpenses = async (req, res, next) => {
         };
         categoryValues.push(remainingResponse);
 
-        const bankAmounts = await Bank.find({},{ _id: 0, bankName: 1, amount: 1 });
-        bankAmounts.map((bankAmount)=>{
+        const bankAmounts = await Bank.find({}, { _id: 0, bankName: 1, amount: 1 });
+        bankAmounts.map((bankAmount) => {
             const bankData = {
-                title:`${bankAmount.bankName} bank availavle amount current month`,
+                title: `${bankAmount.bankName} bank availavle amount current month`,
                 text: bankAmount.amount
             }
             categoryValues.push(bankData);
         })
 
-        res.status(200).json({ response: expenses, cardResponse: categoryValues });
+        const twoDaysLater = new Date(today);
+        twoDaysLater.setDate(today.getDate() + 2);
+        console.log(today,'     ',twoDaysLater);
+        const reminders = await Reminder.find({
+            date: {
+                $gte: today,
+                $lt: twoDaysLater,
+            }
+        })
+
+        res.status(200).json({ response: expenses, cardResponse: categoryValues, reminders: reminders });
     } catch (error) {
         console.log(error);
         next(error);
@@ -172,11 +184,11 @@ exports.deleteExpenses = async (req, res, next) => {
         const expenses = await Expense.findOne({ _id: _id });
         if (expenses) {
             const isDelete = await Expense.deleteOne({ _id: _id });
-            if(isDelete.acknowledged && expenses.type == "Debits"){
+            if (isDelete.acknowledged && expenses.type == "Debits") {
                 await creditsBankAmount(expenses.paymentBank, expenses.amount);
-            } else if(isDelete.acknowledged && expenses.type == "Credits"){
+            } else if (isDelete.acknowledged && expenses.type == "Credits") {
                 await debitsBankAmount(expenses.paymentBank, expenses.amount);
-            } else if(isDelete.acknowledged && expenses.type == "Transfer"){
+            } else if (isDelete.acknowledged && expenses.type == "Transfer") {
                 await creditsBankAmount(expenses.sourceBank, expenses.amount);
                 await debitsBankAmount(expenses.destinationBank, expenses.amount);
             }
@@ -237,20 +249,20 @@ exports.updateExpenses = async (req, res, next) => {
             { new: true }
         );
         if (updateExpense.modifiedCount > 0) {
-            if(expenses.type == 'Credits'){
-                if(expenses.amount < amount){
+            if (expenses.type == 'Credits') {
+                if (expenses.amount < amount) {
                     await creditsBankAmount(expenses.paymentBank, (Number(amount) - Number(expenses.amount)));
                 } else {
                     await debitsBankAmount(expenses.paymentBank, (Number(expenses.amount)) - Number(amount));
                 }
-            } else if(expenses.type == 'Debits') {
-                if(expenses.amount < amount){
+            } else if (expenses.type == 'Debits') {
+                if (expenses.amount < amount) {
                     await debitsBankAmount(expenses.paymentBank, (Number(amount) - Number(expenses.amount)));
                 } else {
                     await creditsBankAmount(expenses.paymentBank, (Number(expenses.amount)) - Number(amount));
                 }
-            } else if(expenses.type == 'Transfer') {
-                if(expenses.amount > amount){
+            } else if (expenses.type == 'Transfer') {
+                if (expenses.amount > amount) {
                     await creditsBankAmount(expenses.sourceBank, (Number(expenses.amount)) - Number(amount));
                     await debitsBankAmount(expenses.destinationBank, (Number(expenses.amount)) - Number(amount));
                 } else {
@@ -316,7 +328,7 @@ exports.downloadExpenses = async (req, res, next) => {
             };
         }
 
-        const expenses = await Expense.find(query).sort({date: -1});
+        const expenses = await Expense.find(query).sort({ date: -1 });
 
         worksheet.addRows(expenses);
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

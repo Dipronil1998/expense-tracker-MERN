@@ -23,6 +23,7 @@ const initialState = {
     isEditing: false,
     expensesData: [],
     cardData: [],
+    reminders:[],
     expenses: "",
     validCategories: ["Stock", "Mutual fund", "Self", "Other"],
     validPaymentMethod: ["Cash", "Online"],
@@ -72,6 +73,7 @@ const AppProvider = ({ children }) => {
                 payload: {
                     expensesData: expensesResponse.data.response,
                     cardData: expensesResponse.data.cardResponse,
+                    reminders: expensesResponse.data.reminders,
                 },
             });
         } catch (error) {
