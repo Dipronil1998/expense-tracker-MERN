@@ -54,7 +54,7 @@ const AuthModal = ({ open}) => {
               // },
             ]}
           >
-            <Input />
+            <Input.Password />
           </Form.Item>
 
           <Form.Item
