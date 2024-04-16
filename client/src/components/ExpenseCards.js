@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 import { useAppContext } from '../context/appContext';
+import ReminderComponent from './ReminderComponent';
 
 const cardTitle = {
     fontSize: "20px",
@@ -13,15 +14,16 @@ const cardText = {
 }
 
 const ExpenseCards = () => {
-    const {cardData} = useAppContext();
+    const {cardData,reminders} = useAppContext();
 
     const chunkedCardData = [];
     for (let i = 0; i < cardData.length; i += 3) {
         chunkedCardData.push(cardData.slice(i, i + 3));
     }
-
+    
     return (
         <div>
+            <ReminderComponent reminders={reminders}/>
             {chunkedCardData.map((row, rowIndex) => (
                 <Row key={rowIndex} className="mb-3">
                     {row.map((card, index) => (

@@ -203,6 +203,50 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "updateAmountToZero",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/backup/updateAmountToZero",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"backup",
+						"updateAmountToZero"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create reminder",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"text\": \"Meeting with the team\",\n  \"description\": \"Discuss project updates and plan for the next sprint\",\n  \"date\": \"2024-03-05\",\n  \"reminderFrequency\": \"daily\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/reminder",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"reminder"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

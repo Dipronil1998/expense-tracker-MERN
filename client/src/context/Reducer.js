@@ -29,6 +29,7 @@ const Reducer = (state, action) => {
             isLoading: false,
             expensesData: action.payload.expensesData,
             cardData: action.payload.cardData,
+            reminders: action.payload.reminders,
         };
     }
     if (action.type === CREATE_EXPENSES_BEGIN) {
