@@ -42,5 +42,6 @@ app.use(pageNotFound);
 app.use(errorHandler);
 
 app.listen(port, ()=>{
+    console.log("Dip");
     console.log(`Server started at ${port}`);
 })
